@@ -73,7 +73,24 @@ public class GridManager : MonoBehaviour
         Debug.Log("This GridComponent cannot be found and thus cannot be removed");
         return false;
     }
+    public static GridComponent CheckItemAtPosition(TileType type, Vector2Int position)
+    {
+        List<GridComponent> pointPosition = null;
+        bool positionExists = gridPosition.TryGetValue(position, out pointPosition);
+        if (positionExists)
+        {
+            foreach (GridComponent grid in pointPosition)
+            {
+                if (grid.tileType == type)
+                {
+                    return grid;
+                }
+            }
+        }
     
+        return null;
+    }
+    //Move the object provided to a new given position
     public static bool MoveSelf(GridComponent gridComp, Vector2Int moveTo)
     {
         if(InsertSelf(gridComp, moveTo))
@@ -82,7 +99,7 @@ public class GridManager : MonoBehaviour
             {
                 return true;
             }
-        }
+        } 
         return false;
     }
 }

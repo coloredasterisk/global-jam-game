@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using TMPro;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 
 public enum TileType
@@ -17,7 +19,7 @@ public class GridComponent : MonoBehaviour
     public TileType tileType;
     public Vector2Int gridPosition;
     public bool isLerping = false;
-    private float lerpSpeed = 20f;
+    private float lerpSpeed = 10f;
 
 
     // Start is called before the first frame update
@@ -40,9 +42,29 @@ public class GridComponent : MonoBehaviour
         if(GridManager.MoveSelf(this, newPos))
         {
             gridPosition = newPos;
+        } else
+        {
+            //Check if object is pushable 
+            GridComponent pushable = GridManager.CheckItemAtPosition(TileType.Block, newPos);
+            if(pushable != null)
+            {
+                if(GridManager.MoveSelf(pushable, newPos + new Vector2Int(x, y)))
+                {
+                    pushable.gridPosition = newPos + new Vector2Int(x, y);
+                    pushable.animatePosition();
+
+                    //try moving again
+                    if(GridManager.MoveSelf(this, newPos))
+                    {
+                        gridPosition = newPos;
+                    }
+                }
+            }
+
         }
         animatePosition();
     }
+
 
 
     public void animatePosition()

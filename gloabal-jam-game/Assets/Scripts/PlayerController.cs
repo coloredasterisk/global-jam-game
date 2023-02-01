@@ -18,19 +18,19 @@ public class PlayerController : MonoBehaviour
     {
         if (!gridComponent.isLerping)
         {
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
             {
                 gridComponent.MovePosition(0, 1);
             }
-            if (Input.GetKeyDown(KeyCode.S))
+            else if (Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))
             {
                 gridComponent.MovePosition(0, -1);
             }
-            if (Input.GetKeyDown(KeyCode.A))
+            else if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
             {
                 gridComponent.MovePosition(-1, 0);
             }
-            if (Input.GetKeyDown(KeyCode.D))
+            else if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
             {
                 gridComponent.MovePosition(1, 0);
             }
