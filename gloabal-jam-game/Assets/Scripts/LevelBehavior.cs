@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum AdjacentType
+{
+    Left,
+    Right,
+    Up,
+    Down,
+}
 public class LevelBehavior : MonoBehaviour
 {
     public bool isPresent = true;
@@ -14,7 +21,14 @@ public class LevelBehavior : MonoBehaviour
 
     public GameObject originalState; //prefab of itself
     public List<string> turnInformation;
-    public List<LevelBehavior> AdjacentLevels;
+    
+    public List<levelDirection> AdjacentLevels;
+
+    [System.Serializable] public struct levelDirection
+    {
+        public AdjacentType type;
+        public LevelBehavior level;
+    }
 
     public void ToggleState()
     {
