@@ -10,24 +10,29 @@ public enum TileType
     Empty,
     Player,
     Block,
-    Wall
+    Wall,
+    SpawnPoint,
 }
 
 public class GridComponent : MonoBehaviour
 {
+    [Header("Let grid position use the world position")]
+    public bool useWorldPosition = true;
+    [Header("")]
     //Attach this script to a game object to track items
     public TileType tileType;
     public Vector2Int gridPosition;
     public bool isLerping = false;
+    
     private float lerpSpeed = 10f;
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        if(gridPosition == null)
+        if(useWorldPosition)
         {
-            gridPosition = new Vector2Int((int)transform.position.x, (int)transform.position.y);
+            gridPosition = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
         }
         else
         {
