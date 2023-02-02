@@ -35,37 +35,27 @@ public class GridComponent : MonoBehaviour
         }
         GridManager.InsertSelf(this);
     }
-
+    public void MovePosition(Vector2Int v)
+    {
+        MovePosition(v.x, v.y);
+    }
     public void MovePosition(int x, int y)
     {
-        Vector2Int newPos = gridPosition + new Vector2Int(x,y); 
-        if(GridManager.MoveSelf(this, newPos))
-        {
-            gridPosition = newPos;
-        } else
-        {
-            //Check if object is pushable 
-            GridComponent pushable = GridManager.CheckItemAtPosition(TileType.Block, newPos);
-            if(pushable != null)
-            {
-                if(GridManager.MoveSelf(pushable, newPos + new Vector2Int(x, y)))
-                {
-                    pushable.gridPosition = newPos + new Vector2Int(x, y);
-                    pushable.animatePosition();
+        Vector2Int moveDirection = new Vector2Int(x, y);
+        Vector2Int newPos = gridPosition + moveDirection;
 
-                    //try moving again
-                    if(GridManager.MoveSelf(this, newPos))
-                    {
-                        gridPosition = newPos;
-                    }
-                }
-            }
+        bool moved = AttemptToMove(this, newPos);
 
+        if(!moved){
+            
+            StateType state = GetComponentInParent<ParentState>().stateType;
+            bool similarPush = CheckPushable(state, newPos, moveDirection);
         }
-        animatePosition();
     }
-
-
+    public void RemoveFromGrid()
+    {
+        GridManager.RemoveSelf(this);
+    }
 
     public void animatePosition()
     {
@@ -73,6 +63,28 @@ public class GridComponent : MonoBehaviour
         {
             StartCoroutine(LerpPosition());
         }
+    }
+    private bool AttemptToMove(GridComponent component, Vector2Int moveTo)
+    {
+        if(GridManager.MoveSelf(component, moveTo))
+        {
+            gridPosition = moveTo;
+            animatePosition();
+            return true;
+        }
+        return false;
+    }
+    private bool CheckPushable(StateType state, Vector2Int newPos, Vector2Int moveDirection)
+    {
+        //Check if object is pushable 
+        GridComponent pushable = GridManager.CheckItemAtPosition(state, TileType.Block, newPos);
+        if (pushable != null)
+        {
+            pushable.MovePosition(moveDirection);
+            AttemptToMove(this, newPos);
+            return true;
+        }
+        return false;
     }
 
     private IEnumerator LerpPosition()
@@ -88,5 +100,11 @@ public class GridComponent : MonoBehaviour
             yield return new WaitForSeconds(Time.deltaTime);
         }
         isLerping = false;
+    }
+    
+    private void OnEnable()
+    {
+        isLerping = false;
+        transform.position = new Vector3(gridPosition.x, gridPosition.y, 0);
     }
 }
