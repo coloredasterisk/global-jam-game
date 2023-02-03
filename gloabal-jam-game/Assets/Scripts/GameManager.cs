@@ -98,7 +98,8 @@ public class GameManager : MonoBehaviour
 
     public void ChangeLevel(LevelBehavior level)
     {
-        cameraLevelTarget.AddMember(level.gameObject.transform, 1, (Mathf.Min(level.dimensions.x, level.dimensions.y) - 2.0f) / 2.0f);
+
+        cameraLevelTarget.AddMember(level.gameObject.transform, 1, level.cameraRadius);
         cameraLevelTarget.RemoveMember(currentLevel.transform);
         
         

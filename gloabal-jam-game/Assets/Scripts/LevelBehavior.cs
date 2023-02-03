@@ -45,9 +45,9 @@ public class LevelBehavior : MonoBehaviour
     public GameObject createdParent;
 
     public Vector2Int dimensions;
+    public float cameraRadius;
 
     public GridComponent spawnPoint;
-    public List<string> turnInformation;
     
     public List<levelAdajcent> AdjacentLevels;
     public List<LevelBehavior> VisibleLevels;
