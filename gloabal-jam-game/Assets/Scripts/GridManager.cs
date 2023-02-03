@@ -190,6 +190,27 @@ public class GridManager : MonoBehaviour
                 return true;
             }
         }
+        if(typeToCheck == TileType.Player)
+        {
+            foreach (GridComponent grid in gridPosition)
+            {
+                //dont move if yes
+                if (grid.tileType == TileType.PlayerForcefield)
+                {
+                    return true;
+                }
+            }
+        } else if(typeToCheck == TileType.Block)
+        {
+            foreach (GridComponent grid in gridPosition)
+            {
+                //dont move if yes
+                if (grid.tileType == TileType.PushableForcefield)
+                {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 

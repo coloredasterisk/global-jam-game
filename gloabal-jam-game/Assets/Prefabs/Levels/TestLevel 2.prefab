@@ -437,10 +437,13 @@ MonoBehaviour:
   presentObject: {fileID: 554909211}
   clonedParent: {fileID: 108164742}
   createdParent: {fileID: 112404336}
-  dimensions: {x: 18, y: 10}
+  dimensions: {x: 19, y: 11}
   originalState: {fileID: 1973278101294069232}
   turnInformation: []
-  AdjacentLevels: []
+  AdjacentLevels:
+  - type: 2
+    level: {fileID: 0}
+  VisibleLevels: []
 --- !u!1001 &4947288
 PrefabInstance:
   m_ObjectHideFlags: 0

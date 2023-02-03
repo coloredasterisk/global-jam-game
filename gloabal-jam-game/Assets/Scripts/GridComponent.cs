@@ -12,6 +12,9 @@ public enum TileType
     Block,
     Wall,
     SpawnPoint,
+    PlayerForcefield,
+    PushableForcefield,
+
 }
 
 public class GridComponent : MonoBehaviour
@@ -55,6 +58,14 @@ public class GridComponent : MonoBehaviour
             
             StateType state = GetComponentInParent<ParentState>().stateType;
             bool similarPush = CheckPushable(state, newPos, moveDirection);
+        }
+
+        
+        if(GetComponent<PlayerController>() != null)
+        {
+            LevelBehavior level = FindObjectOfType<GameManager>().currentLevel;
+            //check if player is out of level bounds
+            level.checkBoundsBehavior(this);
         }
     }
     public void RemoveFromGrid()
