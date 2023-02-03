@@ -11,6 +11,22 @@ public enum AdjacentType
     Up,
     Down,
 }
+public enum TurnAction
+{
+    FaceLeft,
+    FaceRight,
+    FaceUp,
+    FaceDown,
+
+    MoveLeft,
+    MoveRight,
+    MoveUp,
+    MoveDown,
+
+    SwitchState,
+    CreateBlock,
+
+}
 
 public class LevelBehavior : MonoBehaviour
 {
@@ -34,12 +50,21 @@ public class LevelBehavior : MonoBehaviour
     public List<string> turnInformation;
     
     public List<levelAdajcent> AdjacentLevels;
-    public List<levelAdajcent> VisibleLevels;
+    public List<LevelBehavior> VisibleLevels;
 
     [System.Serializable] public struct levelAdajcent
     {
         public AdjacentType type;
         public LevelBehavior level;
+    }
+
+    public void ToggleVisibleStates()
+    {
+        ToggleState();
+        foreach (LevelBehavior level in VisibleLevels)
+        {
+            SetStates(level, isPresent);
+        }
     }
 
     public void ToggleState()
@@ -62,7 +87,23 @@ public class LevelBehavior : MonoBehaviour
             presentObject.SetActive(true);
 
         }
+    }
+    public void SetStates(LevelBehavior levelToSwitch, bool present)
+    {
+        if (present)//switch to present
+        {
+            levelToSwitch.isPresent = true;
+            levelToSwitch.pastObject.SetActive(false);
+            levelToSwitch.presentObject.SetActive(true);
 
+        }
+        else
+        {
+            levelToSwitch.isPresent = false;
+            levelToSwitch.pastObject.SetActive(true);
+            levelToSwitch.presentObject.SetActive(false);
+
+        }
     }
 
     void ReplaceSection()

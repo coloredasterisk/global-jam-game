@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            currentLevel.ToggleState();
+            currentLevel.ToggleVisibleStates();
             TogglePlayer();
         }
         if (Input.GetKeyDown(KeyCode.R))
