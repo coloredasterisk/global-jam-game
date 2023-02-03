@@ -59,10 +59,12 @@ public class PlayerController : MonoBehaviour
             }
             else if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
             {
+                animator.SetFloat("MoveX", -1);
                 gridComponent.MovePosition(-1, 0);
             }
             else if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
             {
+                animator.SetFloat("MoveX", 1);
                 gridComponent.MovePosition(1, 0);
             } 
             
