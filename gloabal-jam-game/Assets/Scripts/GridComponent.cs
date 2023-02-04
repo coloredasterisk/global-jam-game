@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using TMPro;
+using UnityEditor;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 
@@ -14,7 +15,6 @@ public enum TileType
     SpawnPoint,
     PlayerForcefield,
     PushableForcefield,
-
 }
 
 public class GridComponent : MonoBehaviour
@@ -43,11 +43,11 @@ public class GridComponent : MonoBehaviour
         }
         GridManager.InsertSelf(this);
     }
-    public void MovePosition(Vector2Int v)
+    public void MovePosition(Vector2Int v, bool undo)
     {
-        MovePosition(v.x, v.y);
+        MovePosition(v.x, v.y, undo);
     }
-    public void MovePosition(int x, int y)
+    public void MovePosition(int x, int y, bool undo)
     {
         Vector2Int moveDirection = new Vector2Int(x, y);
         Vector2Int newPos = gridPosition + moveDirection;
@@ -57,7 +57,16 @@ public class GridComponent : MonoBehaviour
         if(!moved){
             
             StateType state = GetComponentInParent<ParentState>().stateType;
-            bool similarPush = CheckPushable(state, newPos, moveDirection);
+            bool similarPush = CheckPushable(state, newPos, moveDirection, undo);
+        }
+        else
+        {
+            if(undo == false)
+            {
+                //Debug.Log(name + "(GridComponent) was able to move in the direction " + moveDirection + " resulting in a new position: " + newPos);
+                InteractionLog.NewMovementLog(this, moveDirection, null);
+            }
+            
         }
 
         
@@ -86,20 +95,34 @@ public class GridComponent : MonoBehaviour
         {
             gridPosition = moveTo;
             animatePosition();
+
             return true;
         }
         return false;
     }
-    private bool CheckPushable(StateType state, Vector2Int newPos, Vector2Int moveDirection)
+    private bool CheckPushable(StateType state, Vector2Int newPos, Vector2Int moveDirection, bool undo)
     {
         //Check if object is pushable 
         GridComponent pushable = GridManager.CheckItemAtPosition(state, TileType.Block, newPos);
         if (pushable != null)
         {
-            pushable.MovePosition(moveDirection);
-            AttemptToMove(this, newPos);
+            pushable.MovePosition(moveDirection, undo);
+            if (AttemptToMove(this, newPos))
+            {
+                if(undo == false)
+                {
+                    //Debug.Log(name + "(GridComponent) was able to move in the direction " + moveDirection + " resulting in a new position " + newPos + " by pushing " + pushable.name);
+                    InteractionLog.NewMovementLog(this, moveDirection, pushable);
+                }
+                
+            }
+            else
+            {
+                //Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but " + pushable.name + "(pushable) " + newPos + " blocked it's path.");
+            }
             return true;
         }
+        //Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but something (immovable) " + newPos + " blocked it's path.");
         return false;
     }
 

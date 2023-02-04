@@ -83,12 +83,14 @@ public class GridManager : MonoBehaviour
     {
         List<GridComponent> pointPosition = null;
         bool positionExists = gridStates[location].TryGetValue(position, out pointPosition);
+        //Debug.Log("Position exists: " + positionExists);
         if (positionExists)
         {
             foreach (GridComponent grid in pointPosition)
             {
                 if (grid.tileType == type)
                 {
+                    //Debug.Log("Item equals type: " + type);
                     return grid;
                 }
             }
