@@ -3,31 +3,36 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Grid Stuff")]
     public List<GridComponent> gridPrefabs;
     public static Dictionary<TileType, GridComponent> gridPrefabsDict = new Dictionary<TileType, GridComponent>();
+    public Tilemap gridLines;
 
+    [Header("\nUndoProperties")]
     private float[] undoInterval = {0.25f, 0.1f, 0.05f};
     public int intervalIndex = 0;
     public int undoCounts = 0;
     public float undoTimer = 0;
-    
 
+    [Header("\nLevel Storage")]
     public Dictionary<string, GameObject> levelPrefabs = new Dictionary<string, GameObject>();
     public List<GameObject> levels;
+    public LevelBehavior currentLevel;
 
     public GameObject presentPlayer;
     public GameObject pastPlayer;
-    public GameObject postProcessing;
 
+    [Header("\nVisualEffects")]
+    public GameObject postProcessing;
+    public GameObject colorFilter;
     public CinemachineTargetGroup cameraLevelTarget;
 
-    public LevelBehavior currentLevel;
+    [Header("\nOther")]
     public bool isPresent = true;
-
     public GameObject graveYard;
 
     
@@ -43,6 +48,7 @@ public class GameManager : MonoBehaviour
         {
             gridPrefabsDict.Add(component.tileType, component);
         }
+        ColorGridLines();
     }
     // Update is called once per frame
     void Update()
@@ -88,7 +94,9 @@ public class GameManager : MonoBehaviour
             isPresent = false;
             presentPlayer.SetActive(false);
             pastPlayer.SetActive(true);
+
             postProcessing.SetActive(true);
+            colorFilter.SetActive(true);
 
         }
         else//switch to present
@@ -97,9 +105,9 @@ public class GameManager : MonoBehaviour
             isPresent = true;
             presentPlayer.SetActive(true);
             pastPlayer.SetActive(false);
-            postProcessing.SetActive(false);
 
-            GameObject[] list = new GameObject[1];
+            postProcessing.SetActive(false);
+            colorFilter.SetActive(false);
 
         }
     }
@@ -142,7 +150,7 @@ public class GameManager : MonoBehaviour
         player.RemoveFromGrid();
         player.transform.position = spawnPoint.transform.position;
         player.gridPosition = spawnPoint.gridPosition;
-        GridManager.InsertSelf(player);
+        player.AddToGrid();
     }
 
     public void ChangeLevel(LevelBehavior level)
@@ -170,16 +178,16 @@ public class GameManager : MonoBehaviour
             intervalIndex = 0;
         }
     }
+    public void ColorGridLines()
+    {
+        gridLines.color = new Color(SettingsManager.gridRed, SettingsManager.gridGreen, SettingsManager.gridBlue, gridLines.color.a);
+    }
 
 
     public void SendToGraveyard(GameObject item)
     {
         item.transform.parent = graveYard.transform;
     }
-
-
-
-    
 
 
 

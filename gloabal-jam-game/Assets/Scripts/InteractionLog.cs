@@ -84,7 +84,7 @@ public class InteractionLog : MonoBehaviour
                 recentLog.facedLog.playerThatFaced.facing = recentLog.facedLog.direction;
                 recentLog.facedLog.playerThatFaced.DirectionToAnimation();
                 history.RemoveAt(history.Count - 1);
-                Debug.Log(">>>" +history.Count);
+                //Debug.Log(">>>" +history.Count);
                 //undo since it is usually accompanied by movement
                 if(history.Count > 0)
                 {
@@ -111,7 +111,7 @@ public class InteractionLog : MonoBehaviour
                     {
                         recon.deadComponent.transform.parent = recon.clonedParent;
                         recon.deadComponent.transform.localScale = Vector3.one;
-                        GridManager.InsertSelf(recon.deadComponent);
+                        recon.deadComponent.AddToGrid();
                     }
                 }
                 

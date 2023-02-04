@@ -41,7 +41,7 @@ public class GridComponent : MonoBehaviour
         {
             transform.position = new Vector3(gridPosition.x, gridPosition.y, 0);
         }
-        GridManager.InsertSelf(this);
+        AddToGrid();
     }
     public void MovePosition(Vector2Int v, bool undo)
     {
@@ -75,6 +75,12 @@ public class GridComponent : MonoBehaviour
             LevelBehavior level = FindObjectOfType<GameManager>().currentLevel;
             //check if player is out of level bounds
             level.checkBoundsBehavior(this);
+        }
+    }
+    public void AddToGrid() {
+        if (!GridManager.InsertSelf(this))
+        {
+            Destroy(gameObject);
         }
     }
     public void RemoveFromGrid()

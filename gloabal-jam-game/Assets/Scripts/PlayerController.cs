@@ -42,12 +42,12 @@ public class PlayerController : MonoBehaviour
             GameObject gm = Instantiate(this.gameObject);
             gm.transform.parent = null;
         }
+
+
         if (!gridComponent.isLerping)
         {
             FaceOnPress();
         }
-        
-        IdleWhenReleased();
 
         if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
         {
@@ -55,7 +55,11 @@ public class PlayerController : MonoBehaviour
         }
         if (!gridComponent.isLerping && (holdTimer > holdThreshold || extraControls))
         {
-            if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+            if(Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S))
+            {
+                animator.SetFloat("MoveY", 0);
+            } 
+            else if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
             {
                 animator.SetFloat("MoveY", 1);
                 gridComponent.MovePosition(0, 1, false);
@@ -64,6 +68,11 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetFloat("MoveY", -1);
                 gridComponent.MovePosition(0, -1, false);
+            }
+
+            else if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
+            {
+                animator.SetFloat("MoveX", 0);
             }
             else if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
             {
@@ -77,7 +86,9 @@ public class PlayerController : MonoBehaviour
             } 
             
         }
-        
+
+        IdleWhenReleased();
+
     }
 
     void FaceOnPress()
@@ -105,7 +116,6 @@ public class PlayerController : MonoBehaviour
             InteractionLog.NewFacingLog(this, facing);
         }
         
-        //InteractionLog.NewFacingLog(this, facing); DO NOT USE, STANDING STILL COUNTS AS LOG
         DirectionToAnimation();
     }
     void IdleWhenReleased()
