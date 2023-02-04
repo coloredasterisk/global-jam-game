@@ -29,6 +29,7 @@ public class PlaceBlockController : MonoBehaviour
     {
         
         changeBlock();
+        PlaceBlock();
     }
 
     void changeBlock()
