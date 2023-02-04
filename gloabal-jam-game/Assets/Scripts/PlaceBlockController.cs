@@ -5,15 +5,26 @@ using UnityEngine;
 public class PlaceBlockController : MonoBehaviour
 {
     private PlayerController player;
-    private bool[] blockEquip = {false,false,false,false};
+
+    public static GameObject block1,block2,block3,block4,block5;
+    public List<System.Tuple<GameObject,bool>> blockEquip = new List<System.Tuple<GameObject,bool>>()
+    {
+        new System.Tuple<GameObject, bool> (block1,false),
+        new System.Tuple<GameObject, bool> (block2,false),
+        new System.Tuple<GameObject, bool> (block3,false),
+        new System.Tuple<GameObject, bool> (block4,false),
+        new System.Tuple<GameObject, bool> (block5,false)
+    };
+    
     //private GameObject[] blocks = {block1,block2,block3,block4,block5}; 
     //attempting to combine both 
     //private Tuple<GameObject,bool>[] blockPair = {Tuple.Create(block1, true)};
     // Start is called before the first frame update
     void Start()
     {
-        blockEquip[0] = true;
-        
+        blockEquip[0]= new System.Tuple<GameObject, bool> (blockEquip[0].Item1,true);
+        player = GetComponent<PlayerController>();
+
     }
 
     // Update is called once per frame
@@ -38,26 +49,23 @@ public class PlaceBlockController : MonoBehaviour
     }
 
     void PlaceBlock() {
-        if (Input.GetKeyUp(KeyCode.Space)){
-            
+        if (Input.GetKeyUp(KeyCode.B)){
            //Instantiate(Object.Wall); // need to palce block in current position 
+
         } 
         
     }
 
-    
-
-
-    bool[] enableBlock(int input )
+    List<System.Tuple<GameObject,bool>> enableBlock(int input )
     { //goes and unequips all blocks and equips inputted block
-        for(int i =0; i<blockEquip.Length; i++){
+        for(int i =0; i<blockEquip.Count; i++){
             if (i == input-1 ){
-                blockEquip[i]= true; //index is input so equip block
+                blockEquip[i]= new System.Tuple<GameObject, bool> (blockEquip[i].Item1,true); //index is input so equip block
             } else {
-                blockEquip[i]= false;
+                blockEquip[i]=new System.Tuple<GameObject, bool> (blockEquip[i].Item1,false);
             }
         }
-        return blockEquip;
+        return blockEquip ;
     }
 
 
