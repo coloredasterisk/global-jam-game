@@ -10,7 +10,7 @@ public class PlaceBlockController : MonoBehaviour
 
     public GameObject block1,block2,block3,block4,block5,block6,block7;
     public List<GameObject> blocks;
-    bool[] blockEquip ={false,false,false,false,false};
+    bool[] blockEquip ={false,false,false,false,false,false,false};
 
     
      
