@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7206866011139879426}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3, y: 0, z: 0}
+  m_LocalPosition: {x: -3, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cab27a1aa153c04c9f0c5ab53aaf1cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useWorldPosition: 1
   tileType: 3
   gridPosition: {x: 0, y: 0}
   isLerping: 0

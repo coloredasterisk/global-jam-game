@@ -205,4 +205,29 @@ public class GridComponent : MonoBehaviour
             plate.DynamicReset();
         }
     }
+    public void checkLaser(){
+
+        PillarBehaviour pillar = GetComponent<PillarBehaviour>();
+
+        Vector2Int leftPosition = gridPosition + new Vector2Int (-1,0);
+        Vector2Int rightPosition = gridPosition +  new Vector2Int (1,0);
+        Vector2Int upPosition = gridPosition +  new Vector2Int (0,1);
+        Vector2Int downPosition = gridPosition + new Vector2Int (0,-1);
+
+        
+        if ((GridManager.CheckItemAtPosition(this, TileType.LaserHorizontal, leftPosition)!= null )
+        || (GridManager.CheckItemAtPosition(this, TileType.LaserHorizontal, rightPosition)!= null) 
+        || (GridManager.CheckItemAtPosition(this, TileType.LaserHorizontal, transform.position)!= null) || 
+        (GridManager.CheckItemAtPosition(this, TileType.LaserHorizontal, downPosition)!= null)) {
+            pillar.checkLaser();
+            
+            
+
+        } else {
+
+            pillar.checkLaser();
+        }
+    }
+
+
 }

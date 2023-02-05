@@ -28,7 +28,7 @@ public class PressurePlateBehavior : MonoBehaviour
         isOn = true;
         TurnListOff(turnObjectsOff);
         TurnListOn(turnObjectsOn);
-        clicked.Play();
+        //clicked.Play();
 
 
     }
