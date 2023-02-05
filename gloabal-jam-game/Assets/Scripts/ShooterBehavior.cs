@@ -13,8 +13,8 @@ public class ShooterBehavior : MonoBehaviour
     }
 
 
-    void CreateLaser()
+  /*  void CreateLaser()
     {
         GridManager.CheckItemAtPosition(gridComponent.GetComponentsInParent<ParentState>(), );
-    }
+    } */
 }

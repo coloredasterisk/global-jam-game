@@ -24,7 +24,8 @@ public class GridManager : MonoBehaviour
         TileType.Player,
         TileType.Wall,
         TileType.Shooter,
-        TileType.Mirror,
+        TileType.Mirror45,
+        TileType.Mirror135
     };
     //overloaded function
     public static bool InsertSelf(GridComponent gridComp)
@@ -206,7 +207,7 @@ public class GridManager : MonoBehaviour
         return false;
     }
 
-    public static bool LaserCollision(TileType typeToCheck, StateType location, Vector2Int position)
+ /*   public static bool LaserCollision(TileType typeToCheck, StateType location, Vector2Int position)
     {
         bool solidInsert = solidObjects.Contains(typeToCheck);
         List<GridComponent> gridPosition = retrieveCell(location, position);
@@ -222,7 +223,7 @@ public class GridManager : MonoBehaviour
                 return true;
             }
         }
-    }
+    } */
 
     //Move the object provided to a new given position
     public static bool MoveSelf(GridComponent gridComp, Vector2Int moveTo)
