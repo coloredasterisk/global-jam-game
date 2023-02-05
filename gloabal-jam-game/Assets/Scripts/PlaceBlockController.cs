@@ -8,8 +8,8 @@ public class PlaceBlockController : MonoBehaviour
     private GridComponent gridComponent;
     
 
-    public GameObject block1,block2,block3,block4,block5;
-    public List<GameObject> blocks2 ;
+    public GameObject block1,block2,block3,block4,block5,block6,block7;
+    public List<GameObject> blocks;
     bool[] blockEquip ={false,false,false,false,false};
 
     
@@ -35,17 +35,21 @@ public class PlaceBlockController : MonoBehaviour
 
     void changeBlock()
     {
-        if (Input.GetKeyUp(KeyCode.Keypad1)) {
+        if (Input.GetKeyUp(KeyCode.Alpha1)) {
             enableBlock(1);
-        } else if (Input.GetKeyUp(KeyCode.Keypad2)){
+        } else if (Input.GetKeyUp(KeyCode.Alpha2)){
             enableBlock(2);
-        } else if (Input.GetKeyUp(KeyCode.Keypad3)){
+        } else if (Input.GetKeyUp(KeyCode.Alpha3)){
             enableBlock(3);
-        }else if (Input.GetKeyUp(KeyCode.Keypad4)){
+        }else if (Input.GetKeyUp(KeyCode.Alpha4)){
             enableBlock(4);
-        }else if (Input.GetKeyUp(KeyCode.Keypad5)){
+        }else if (Input.GetKeyUp(KeyCode.Alpha5)){
             enableBlock(5);
-        }
+        } else if (Input.GetKeyUp(KeyCode.Alpha6)){
+            enableBlock(6);
+        } else if (Input.GetKeyUp(KeyCode.Alpha7)){
+            enableBlock(7);
+        } 
     }
 
     void PlaceBlock() {
@@ -68,6 +72,12 @@ public class PlaceBlockController : MonoBehaviour
                     }else if (i==4) {
                         GameObject newBlock = Instantiate(block5,FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
                         newBlock.transform.position = checkPosition();
+                    }else if (i==5) {
+                        GameObject newBlock = Instantiate(block6,FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                        newBlock.transform.position = checkPosition();
+                    }else if (i==6) {
+                        GameObject newBlock = Instantiate(block7,FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                        newBlock.transform.position = checkPosition();
                     }
                 }
             }
@@ -88,6 +98,7 @@ public class PlaceBlockController : MonoBehaviour
         }
         return blockEquip ;
     }
+
 
     Vector3 checkPosition() {
         Vector3 current = transform.position;
