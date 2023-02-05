@@ -172,7 +172,6 @@ public class GridComponent : MonoBehaviour
         //Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but something (immovable) " + newPos + " blocked it's path.");
         return false;
     }
-
     private IEnumerator LerpPosition()
     {
         float timeScale = 0f;

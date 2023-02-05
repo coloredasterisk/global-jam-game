@@ -118,6 +118,18 @@ public class GridManager : MonoBehaviour
     
         return null;
     }
+    public static GridComponent CheckItemAtPosition(GridComponent location, List<TileType> types, Vector2Int position)
+    {
+        foreach(TileType type in types)
+        {
+            
+            GridComponent gc = CheckItemAtPosition(location, type, position);
+            if (gc != null)
+            {
+                return gc;
+            }
+        }
+    }
     public static GridComponent CheckItemAtPosition(GridComponent location, TileType type, Vector2Int position)
     {
         return CheckItemAtPosition(location.GetComponentInParent<ParentState>(true).stateType, type, position);
