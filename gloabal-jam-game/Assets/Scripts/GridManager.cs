@@ -115,6 +115,11 @@ public class GridManager : MonoBehaviour
     
         return null;
     }
+    public static GridComponent CheckItemAtPosition(GridComponent location, TileType type, Vector3 position)
+    {
+        Vector2Int newVector = new Vector2Int(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y));
+        return CheckItemAtPosition(location.GetComponentInParent<ParentState>(true).stateType, type, newVector);
+    }
     /// <summary>
     /// This function takes a gridComponent 'location' and and returns the stateType found in the parent 
     /// </summary>
@@ -213,6 +218,7 @@ public class GridManager : MonoBehaviour
             //dont add if two objects collide
             if (solidInsert && solidObjects.Contains(grid.tileType))
             {
+                if()
                 return true;
             }
         }
