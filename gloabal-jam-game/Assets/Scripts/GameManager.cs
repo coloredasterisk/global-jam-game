@@ -35,6 +35,9 @@ public class GameManager : MonoBehaviour
     public bool isPresent = true;
     public GameObject graveYard;
 
+    private AudioSource audioSource;
+    public AudioClip[] audioClip;
+
     
 
     private void Awake()
@@ -49,6 +52,7 @@ public class GameManager : MonoBehaviour
             gridPrefabsDict.Add(component.tileType, component);
         }
         ColorGridLines();
+        audioSource = GetComponent<AudioSource>();
     }
     // Update is called once per frame
     void Update()
@@ -57,6 +61,9 @@ public class GameManager : MonoBehaviour
         {
             currentLevel.ToggleVisibleStates();
             TogglePlayer();
+
+            audioSource.clip = audioClip[0];
+            audioSource.Play();
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -119,30 +126,29 @@ public class GameManager : MonoBehaviour
 
         GameObject createdPrefab = levelPrefab.GetComponent<LevelBehavior>().createdParent;
         GameObject clonedPrefab = levelPrefab.GetComponent<LevelBehavior>().clonedParent;
-        GameObject dynamicPastPrefab = levelPrefab.GetComponent<LevelBehavior>().dynamicPast;
-        GameObject dynamicPresentPrefab = levelPrefab.GetComponent<LevelBehavior>().dynamicPresent;
 
         currentLevel.EraseChildrenFromGrid();
 
         Destroy(currentLevel.createdParent);
         Destroy(currentLevel.clonedParent);
-        Destroy(currentLevel.dynamicPast);
-        Destroy(currentLevel.dynamicPresent);
 
         GameObject createdClone = Instantiate(createdPrefab, currentLevel.pastObject.transform);
         GameObject clonedClone = Instantiate(clonedPrefab, currentLevel.presentObject.transform);
-        GameObject dynamicPastClone = Instantiate(dynamicPastPrefab, currentLevel.pastObject.transform);
-        GameObject dynamicPresentClone = Instantiate(dynamicPresentPrefab, currentLevel.presentObject.transform);
 
         currentLevel.createdParent = createdClone;
         currentLevel.clonedParent = clonedClone;
-        currentLevel.dynamicPast = dynamicPastClone;
-        currentLevel.dynamicPresent = dynamicPresentClone;
-        //may need separate spawnpoint for past player
-        currentLevel.spawnPoint = currentLevel.presentObject.transform.Find("StaticObjects").Find("SpawnPoint").GetComponent<GridComponent>();
 
-        ResetPlayerPosition(presentPlayer.GetComponentInChildren<GridComponent>(true), currentLevel.spawnPoint);
-        ResetPlayerPosition(pastPlayer.GetComponentInChildren<GridComponent>(true), currentLevel.spawnPoint);
+        currentLevel.presentSpawnPoint = currentLevel.presentObject.transform.Find("StaticObjects").Find("SpawnPoint").GetComponent<GridComponent>();
+        currentLevel.pastSpawnPoint = currentLevel.pastObject.transform.Find("StaticObjects").Find("SpawnPoint").GetComponent<GridComponent>();
+
+        ResetPlayerPosition(presentPlayer.GetComponentInChildren<GridComponent>(true), currentLevel.presentSpawnPoint);
+        ResetPlayerPosition(pastPlayer.GetComponentInChildren<GridComponent>(true), currentLevel.pastSpawnPoint);
+
+        GridComponent[] dynamicObjects = currentLevel.dynamicPresent.GetComponentsInChildren<GridComponent>();
+        foreach (GridComponent dynamic in dynamicObjects)
+        {
+            dynamic.DynamicReset();
+        }
 
     }
     public void ResetPlayerPosition(GridComponent player, GridComponent spawnPoint)
@@ -150,7 +156,7 @@ public class GameManager : MonoBehaviour
         player.RemoveFromGrid();
         player.transform.position = spawnPoint.transform.position;
         player.gridPosition = spawnPoint.gridPosition;
-        player.AddToGrid();
+        player.AddToGrid(false);
     }
 
     public void ChangeLevel(LevelBehavior level)
@@ -161,6 +167,7 @@ public class GameManager : MonoBehaviour
 
         currentLevel = level;
 
+        ResetPlayerPosition(pastPlayer.GetComponentInChildren<GridComponent>(true), currentLevel.pastSpawnPoint);
     }
 
     public void IntervalChange()

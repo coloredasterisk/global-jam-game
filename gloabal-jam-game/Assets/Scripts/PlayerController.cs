@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     private GridComponent gridComponent;
     public Animator animator;
 
+    public AudioClip[] sounds;
+    public AudioSource audioSource;
+
     private float holdThreshold = 0.2f;
     public float holdTimer = 0f;
     public Facing facing = Facing.Down;
@@ -25,6 +28,7 @@ public class PlayerController : MonoBehaviour
         playerRB = GetComponent<Rigidbody2D>();
         gridComponent = GetComponent<GridComponent>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -58,12 +62,14 @@ public class PlayerController : MonoBehaviour
             else if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
             {
                 animator.SetFloat("MoveY", 1);
-                gridComponent.MovePosition(0, 1, false);
+                bool moved = gridComponent.MovePosition(0, 1, false);
+                PlayStepSound(moved);
             }
             else if (Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))
             {
                 animator.SetFloat("MoveY", -1);
-                gridComponent.MovePosition(0, -1, false);
+                bool moved = gridComponent.MovePosition(0, -1, false);
+                PlayStepSound(moved);
             }
 
             else if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
@@ -73,18 +79,30 @@ public class PlayerController : MonoBehaviour
             else if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
             {
                 animator.SetFloat("MoveX", -1);
-                gridComponent.MovePosition(-1, 0, false);
+                bool moved = gridComponent.MovePosition(-1, 0, false);
+                PlayStepSound(moved);
             }
             else if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
             {
                 animator.SetFloat("MoveX", 1);
-                gridComponent.MovePosition(1, 0, false);
+                bool moved = gridComponent.MovePosition(1, 0, false);
+                PlayStepSound(moved);
             } 
             
         }
 
         IdleWhenReleased();
-
+    }
+    private void PlayStepSound(bool moved)
+    {
+        if (moved)
+        {
+            int index = Random.Range(0, sounds.Length);
+            audioSource.clip = sounds[index];
+            audioSource.Play();
+        }
+        
+        
     }
 
     void FaceOnPress()

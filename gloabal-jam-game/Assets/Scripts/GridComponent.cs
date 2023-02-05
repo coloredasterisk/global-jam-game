@@ -15,10 +15,15 @@ public enum TileType
     SpawnPoint,
     PlayerForcefield,
     PushableForcefield,
+    PressurePlate,
 }
 
 public class GridComponent : MonoBehaviour
 {
+    //dynamic override
+    private Vector2Int originalPosition;
+
+
     [Header("Let grid position use the world position")]
     public bool useWorldPosition = true;
     [Header("")]
@@ -41,14 +46,16 @@ public class GridComponent : MonoBehaviour
         {
             transform.position = new Vector3(gridPosition.x, gridPosition.y, 0);
         }
-        AddToGrid();
+        originalPosition = gridPosition;
+        AddToGrid(true);
     }
-    public void MovePosition(Vector2Int v, bool undo)
+    public bool MovePosition(Vector2Int v, bool undo)
     {
-        MovePosition(v.x, v.y, undo);
+        return MovePosition(v.x, v.y, undo);
     }
-    public void MovePosition(int x, int y, bool undo)
+    public bool MovePosition(int x, int y, bool undo)
     {
+        bool returnMovement = false;
         Vector2Int moveDirection = new Vector2Int(x, y);
         Vector2Int newPos = gridPosition + moveDirection;
 
@@ -58,6 +65,7 @@ public class GridComponent : MonoBehaviour
             
             StateType state = GetComponentInParent<ParentState>().stateType;
             bool similarPush = CheckPushable(state, newPos, moveDirection, undo);
+            returnMovement = similarPush;
         }
         else
         {
@@ -66,9 +74,9 @@ public class GridComponent : MonoBehaviour
                 //Debug.Log(name + "(GridComponent) was able to move in the direction " + moveDirection + " resulting in a new position: " + newPos);
                 InteractionLog.NewMovementLog(this, moveDirection, null);
             }
-            
-        }
+            returnMovement = true;
 
+        }
         
         if(GetComponent<PlayerController>() != null)
         {
@@ -76,12 +84,22 @@ public class GridComponent : MonoBehaviour
             //check if player is out of level bounds
             level.checkBoundsBehavior(this);
         }
+        return returnMovement;
     }
-    public void AddToGrid() {
-        if (!GridManager.InsertSelf(this))
+    public bool AddToGrid(bool isClone) {
+        if (GridManager.InsertSelf(this))
         {
-            Destroy(gameObject);
+            return true;
         }
+        else
+        {
+            if (isClone)
+            {
+                Destroy(gameObject);
+            }
+            return false;
+        }
+
     }
     public void RemoveFromGrid()
     {
@@ -122,10 +140,6 @@ public class GridComponent : MonoBehaviour
                 }
                 
             }
-            else
-            {
-                //Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but " + pushable.name + "(pushable) " + newPos + " blocked it's path.");
-            }
             return true;
         }
         //Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but something (immovable) " + newPos + " blocked it's path.");
@@ -151,5 +165,18 @@ public class GridComponent : MonoBehaviour
     {
         isLerping = false;
         transform.position = new Vector3(gridPosition.x, gridPosition.y, 0);
+    }
+
+    public void DynamicReset()
+    {
+        RemoveFromGrid();
+        gridPosition = originalPosition;
+        AddToGrid(false);
+
+        PressurePlateBehavior plate = GetComponent<PressurePlateBehavior>();
+        if(plate != null)
+        {
+            plate.DynamicReset();
+        }
     }
 }

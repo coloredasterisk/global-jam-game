@@ -50,6 +50,11 @@ public class GridManager : MonoBehaviour
                 return false;
             }
 
+            GridComponent pressurePlate = CheckItemAtPosition(gridComp.GetComponentInParent<ParentState>().stateType, TileType.PressurePlate, position);
+            if(pressurePlate != null){
+                pressurePlate.GetComponent<PressurePlateBehavior>().SwitchOn();
+            }
+
             pointPosition.Add(gridComp);
         }
         else
@@ -74,6 +79,16 @@ public class GridManager : MonoBehaviour
             {//delete empty list
                 GetGridState(gridComp).Remove(gridComp.gridPosition);
             }
+
+            //check pressure plate
+            GridComponent pressurePlate = CheckItemAtPosition(gridComp.GetComponentInParent<ParentState>(true).stateType, TileType.PressurePlate, gridComp.gridPosition);
+            if (pressurePlate != null)
+            {
+                pressurePlate.GetComponent<PressurePlateBehavior>().SwitchOff();
+            }
+            
+
+
             return true;
         }
         Debug.Log("This GridComponent cannot be found and thus cannot be removed");
@@ -136,39 +151,7 @@ public class GridManager : MonoBehaviour
 
         return pointPosition;
     }
-    /// <summary>
-    /// Returns the gridComponents found in the first location and second location provided, they are combined into a single list
-    /// </summary>
-    /// <param name="firstLocation"></param>
-    /// <param name="secondLocation"></param>
-    /// <param name="position"></param>
-    /// <returns></returns>
-    private static List<GridComponent> retrieveMultipleCells(StateType firstLocation, StateType secondLocation, Vector2Int position) 
-    {
-        List<GridComponent> firstGrid = null;
-        gridStates[firstLocation].TryGetValue(position, out firstGrid);
 
-        List<GridComponent> secondGrid = null;
-        gridStates[secondLocation].TryGetValue(position, out secondGrid);
-
-        if(firstGrid != null && secondGrid != null)
-        {
-            return null;
-        }
-        else
-        {
-            List<GridComponent> mixture = new List<GridComponent>();
-            if(firstGrid != null)
-            {
-                mixture.Union(firstGrid);
-            }
-            if(secondGrid != null)
-            {
-                mixture.Union(secondGrid);
-            }
-            return mixture;
-        }
-    }
     /// <summary>
     /// Return false if the item at the position is solid and the typeToCheck is solid
     /// </summary>

@@ -33,7 +33,8 @@ public class LevelBehavior : MonoBehaviour
     public Vector2Int dimensions;
     public float cameraRadius;
 
-    public GridComponent spawnPoint;
+    public GridComponent presentSpawnPoint;
+    public GridComponent pastSpawnPoint;
     
     public List<levelAdajcent> AdjacentLevels;
     public List<LevelBehavior> VisibleLevels;
