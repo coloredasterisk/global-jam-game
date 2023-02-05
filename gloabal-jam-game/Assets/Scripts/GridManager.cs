@@ -122,13 +122,13 @@ public class GridManager : MonoBehaviour
     {
         foreach(TileType type in types)
         {
-            
             GridComponent gc = CheckItemAtPosition(location, type, position);
             if (gc != null)
             {
                 return gc;
             }
         }
+        return null;
     }
     public static GridComponent CheckItemAtPosition(GridComponent location, TileType type, Vector2Int position)
     {
@@ -239,5 +239,14 @@ public class GridManager : MonoBehaviour
             }
         } 
         return false;
+    }
+
+    public static Vector2Int convertToVector2(Vector3 vector)
+    {
+        return new Vector2Int(Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.y));
+    }
+    public static Vector3 convertToVector3(Vector2Int vector)
+    {
+        return new Vector3(vector.x, vector.y, 0);
     }
 }
