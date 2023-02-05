@@ -19,6 +19,7 @@ public class LaserBehavior : MonoBehaviour
             TileType.Mirror45,
             TileType.Shooter,
             TileType.Pillar,
+
         };
     public GridComponent laserPrefab;
     public Vector2Int direction;
@@ -31,12 +32,8 @@ public class LaserBehavior : MonoBehaviour
 
     public void CreateSelf()
     {
-        /* if horizontal GridManager.CheckItemAtPosition(gc, list of passable, one unit left / right of current position) != null {
-            isntasntiate(laser, position left)
-            do the same thing for right side
+        //check if it's horizontal/vertical
 
-            do if statement for vertical
-        }*/
         impassable.Add(laserPrefab.tileType);
         GridComponent test = GridManager.CheckItemAtPosition(laserPrefab, impassable, laserPrefab.gridPosition + direction);
         if (test == null)
