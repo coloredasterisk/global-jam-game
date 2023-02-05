@@ -59,6 +59,7 @@ public class PressurePlateBehavior : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log("About to remove :" + component.name);
                     component.RemoveFromGrid();
                     component.gameObject.SetActive(false);
                 }

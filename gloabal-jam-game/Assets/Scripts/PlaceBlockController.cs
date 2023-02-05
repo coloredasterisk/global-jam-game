@@ -67,42 +67,42 @@ public class PlaceBlockController : MonoBehaviour
                     {
                         if (i == 0)
                         {
-                            block1.transform.position = GridManager.convertToVector3(checkPosition());
+                            SetPosition(block1);
                             GameObject newBlock = Instantiate(block1, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
                                                                                                                                              //gridComponent.gridPosition =
                         }
                         else if (i == 1)
                         {
+                            SetPosition(block2);
                             GameObject newBlock = Instantiate(block2, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                            newBlock.transform.position = GridManager.convertToVector3(checkPosition());
                         }
                         else if (i == 2)
                         {
+                            SetPosition(block3);
                             GameObject newBlock = Instantiate(block3, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                            newBlock.transform.position = GridManager.convertToVector3(checkPosition());
                         }
                         else if (i == 3)
                         {
+                            SetPosition(block4);
                             GameObject newBlock = Instantiate(block4, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                            newBlock.transform.position = GridManager.convertToVector3(checkPosition());
                         }
                         else if (i == 4)
                         {
-                            Debug.Log("placed");
+                            SetPosition(block5);
                             GameObject newBlock = Instantiate(block5, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                            newBlock.transform.position = GridManager.convertToVector3(checkPosition());
+                            
                         }
                         else if (i == 5)
                         {
-                            Debug.Log("placed");
+                            SetPosition(block6);
                             GameObject newBlock = Instantiate(block6, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                            newBlock.transform.position = GridManager.convertToVector3(checkPosition());
+
                         }
                         else if (i == 6)
                         {
-                            Debug.Log("placed");
+                            SetPosition(block7);
                             GameObject newBlock = Instantiate(block7, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                            newBlock.transform.position = GridManager.convertToVector3(checkPosition());
+
                         }
                     }
                 }
@@ -112,6 +112,13 @@ public class PlaceBlockController : MonoBehaviour
 
         } 
         
+    }
+
+    public void SetPosition(GameObject block)
+    {
+        Vector2Int gridPos = checkPosition();
+        block.transform.position = GridManager.convertToVector3(gridPos);
+        block.GetComponent<GridComponent>().gridPosition = gridPos;
     }
 
     bool[] enableBlock(int input )
