@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour
     public List<GameObject> levels;
     public LevelBehavior currentLevel;
 
+    public GameObject pastGround;
+    public GameObject presentGround;
+
     public GameObject presentPlayer;
     public GameObject pastPlayer;
 
@@ -102,6 +105,9 @@ public class GameManager : MonoBehaviour
             presentPlayer.SetActive(false);
             pastPlayer.SetActive(true);
 
+            presentGround.SetActive(false);
+            pastGround.SetActive(true);
+
             postProcessing.SetActive(true);
             colorFilter.SetActive(true);
 
@@ -112,6 +118,9 @@ public class GameManager : MonoBehaviour
             isPresent = true;
             presentPlayer.SetActive(true);
             pastPlayer.SetActive(false);
+
+            presentGround.SetActive(true);
+            pastGround.SetActive(false);
 
             postProcessing.SetActive(false);
             colorFilter.SetActive(false);

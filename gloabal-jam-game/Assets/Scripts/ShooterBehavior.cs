@@ -107,6 +107,7 @@ public class ShooterBehavior : MonoBehaviour
 
         if(hitPillar != null)
         {
+            hitPillar.SwitchSprites(false);
             hitPillar.pressure.SwitchOff();
             hitPillar = null;
 
@@ -125,11 +126,20 @@ public class ShooterBehavior : MonoBehaviour
         GridComponent test = GridManager.CheckItemAtPosition(gridComponent, types, locationToMake + direction);
         if (test == null)
         {
+            if (direction == Vector2Int.up || direction == Vector2Int.down)
+            {
+                laserPrefab = laserVerticalPrefab;
+            }
+            else if (direction == Vector2Int.left || direction == Vector2Int.right)
+            {
+                laserPrefab = laserHorizontalPrefab;
+            }
             LaserBehavior laser = laserPrefab.GetComponent<LaserBehavior>();
             laser.parent = this;
             laser.index = chain.Count;
             laserPrefab.transform.position = 
                 GridManager.convertToVector3(locationToMake + direction);
+            
 
             chain.Add(Instantiate(laserPrefab, transform.parent));
 
@@ -145,7 +155,9 @@ public class ShooterBehavior : MonoBehaviour
         else if(test.tileType == TileType.Pillar)
         {
             hitPillar = test.GetComponent<PillarBehaviour>();
+            hitPillar.SwitchSprites(true);
             hitPillar.pressure.SwitchOn();
+
 
             return false;
         }

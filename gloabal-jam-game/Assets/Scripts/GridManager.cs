@@ -134,7 +134,7 @@ public class GridManager : MonoBehaviour
             return true;
         }
         //Debug.Log("GridCOmp :"+ gridComp.name + "Position: " + gridComp.gridPosition);
-        //Debug.Log("This GridComponent cannot be found and thus cannot be removed");
+        Debug.Log("This GridComponent cannot be found and thus cannot be removed");
         return false;
     }
     public static GridComponent CheckItemAtPosition(StateType location, TileType type, Vector2Int position)

@@ -236,6 +236,9 @@ public class GridComponent : MonoBehaviour
             pillar.checkLaser();
         }
     }
+    public void SwitchSprites()
+    {
 
+    }
 
 }

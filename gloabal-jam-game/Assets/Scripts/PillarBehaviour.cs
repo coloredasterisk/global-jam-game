@@ -10,6 +10,9 @@ public class PillarBehaviour : MonoBehaviour
     private ShooterBehavior laser;
     private GridComponent gc;
 
+    public Sprite offSprite;
+    public Sprite onSprite;
+
     private List<TileType> horizontal = new List<TileType> {TileType.PressurePlate};
     private List<TileType> vertical = new List<TileType> {TileType.LaserVertical};
 
@@ -21,12 +24,20 @@ public class PillarBehaviour : MonoBehaviour
         laser = GetComponent<ShooterBehavior>();
         gc = GetComponent<GridComponent>();
     }
-    /*
-    // Update is called once per frame
-    void Update()
+
+    public void SwitchSprites(bool on)
     {
-        checkLaser();
-    }*/
+        if (on)
+        {
+            GetComponent<SpriteRenderer>().sprite = onSprite;
+           
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().sprite = offSprite;
+        }
+    }
+
 
     
     public void checkLaser(){
