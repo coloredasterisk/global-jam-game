@@ -18,7 +18,7 @@ public class GridManager : MonoBehaviour
     };
 
     //store solid object positions
-    private static List<TileType> solidObjects = new List<TileType>()
+    public static List<TileType> solidObjects = new List<TileType>()
     {
         TileType.Block,
         TileType.Player,
@@ -146,7 +146,7 @@ public class GridManager : MonoBehaviour
         return gridStates[GetState(location)];
     }
     //overloaded function
-    private static List<GridComponent> retrieveCell(GridComponent location, Vector2Int position)
+    public static List<GridComponent> retrieveCell(GridComponent location, Vector2Int position)
     {
         return retrieveCell(GetState(location), position);
     }
@@ -156,7 +156,7 @@ public class GridManager : MonoBehaviour
     /// <param name="location"></param>
     /// <param name="position"></param>
     /// <returns></returns>
-    private static List<GridComponent> retrieveCell(StateType location, Vector2Int position)
+    public static List<GridComponent> retrieveCell(StateType location, Vector2Int position)
     {
         Dictionary<Vector2Int, List<GridComponent>> gridPosition = gridStates[location];
 
@@ -213,27 +213,7 @@ public class GridManager : MonoBehaviour
         return false;
     }
 
-    public static bool LaserCollision(TileType typeToCheck, StateType location, Vector2Int position)
-    {
-        bool solidInsert = solidObjects.Contains(typeToCheck);
-        List<GridComponent> gridPosition = retrieveCell(location, position);
-
-        if (gridPosition == null) return false;
-
-        foreach (GridComponent grid in gridPosition)
-        {
-            //dont add if two objects collide
-            if (solidInsert && solidObjects.Contains(grid.tileType))
-            {
-                if(grid.tileType == TileType.Mirror135 || grid.tileType == TileType.Mirror45)
-                {
-                    //call function
-                }
-                return true;
-            }
-        }
-        return false;
-    }
+    
 
     //Move the object provided to a new given position
     public static bool MoveSelf(GridComponent gridComp, Vector2Int moveTo)

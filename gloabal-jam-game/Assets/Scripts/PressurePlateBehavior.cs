@@ -7,6 +7,7 @@ public class PressurePlateBehavior : MonoBehaviour
     private AudioSource clicked;
     public List<GridComponent> turnObjectsOn;
     public List<GridComponent> turnObjectsOff;
+    public ShooterBehavior laserShooter;
     public bool isOn = false;
 
     private void Start()
@@ -29,7 +30,9 @@ public class PressurePlateBehavior : MonoBehaviour
         TurnListOff(turnObjectsOff);
         TurnListOn(turnObjectsOn);
         clicked.Play();
-        
+        laserShooter.CreateLaser();
+
+
     }
     public void SwitchOff()
     {
