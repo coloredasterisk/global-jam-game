@@ -114,8 +114,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ae71ef01209c942a714f34cf990e08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laserHorizontalPrefab: {fileID: 4574984180547600384, guid: a4c955d7b11ea1544861d1f19de77faa, type: 3}
-  laserVerticalPrefab: {fileID: 4574984180547600384, guid: 474c0603f1760e143ba16eeb6eaaa976, type: 3}
+  verticalImpassable: 0100000002000000030000000a000000090000000b0000000e0000000c000000
+  horizontalImpassable: 0100000002000000030000000a000000090000000b0000000e0000000d000000
+  laserHorizontalPrefab: {fileID: 7206866011139879429, guid: a4c955d7b11ea1544861d1f19de77faa, type: 3}
+  laserVerticalPrefab: {fileID: 7206866011139879429, guid: 474c0603f1760e143ba16eeb6eaaa976, type: 3}
   directionFacing: {x: 0, y: 0}
   gridComponent: {fileID: 0}
-  firstChain: {fileID: 0}
+  chain: []
+  num: 0

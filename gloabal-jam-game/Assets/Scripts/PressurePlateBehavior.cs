@@ -7,7 +7,6 @@ public class PressurePlateBehavior : MonoBehaviour
     private AudioSource clicked;
     public List<GridComponent> turnObjectsOn;
     public List<GridComponent> turnObjectsOff;
-    public ShooterBehavior laserShooter;
     public bool isOn = false;
 
     private void Start()
@@ -31,12 +30,6 @@ public class PressurePlateBehavior : MonoBehaviour
         TurnListOn(turnObjectsOn);
         clicked.Play();
 
-        if(laserShooter != null)
-        {
-            laserShooter.CreateLaser();
-        }
-        
-
 
     }
     public void SwitchOff()
@@ -49,10 +42,7 @@ public class PressurePlateBehavior : MonoBehaviour
             clicked.Play();
         }
 
-        if (laserShooter != null)
-        {
-            laserShooter.CutLaser();
-        }
+
 
 
     }
@@ -63,8 +53,16 @@ public class PressurePlateBehavior : MonoBehaviour
         {
             foreach (GridComponent component in list)
             {
-                component.RemoveFromGrid();
-                component.gameObject.SetActive(false);
+                if(component.GetComponent<ShooterBehavior>() != null)
+                {
+                    component.GetComponent<ShooterBehavior>().CreateLaser();
+                }
+                else
+                {
+                    component.RemoveFromGrid();
+                    component.gameObject.SetActive(false);
+                }
+                
             }
         }
     }
@@ -74,11 +72,19 @@ public class PressurePlateBehavior : MonoBehaviour
         {
             foreach (GridComponent component in list)
             {
-                bool placed = component.AddToGrid(false);
-                if (placed)
+                if (component.GetComponent<ShooterBehavior>() != null)
                 {
-                    component.gameObject.SetActive(true);
+                    component.GetComponent<ShooterBehavior>().CutLaser();
                 }
+                else
+                {
+                    bool placed = component.AddToGrid(false);
+                    if (placed)
+                    {
+                        component.gameObject.SetActive(true);
+                    }
+                }
+                
             }
         }
     }

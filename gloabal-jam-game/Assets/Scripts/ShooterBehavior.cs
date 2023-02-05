@@ -4,11 +4,38 @@ using UnityEngine;
 
 public class ShooterBehavior : MonoBehaviour
 {
-    public LaserBehavior laserHorizontalPrefab;
-    public LaserBehavior laserVerticalPrefab;
+
+    public List<TileType> verticalImpassable = new List<TileType>(){
+            TileType.Player,
+            TileType.Block,
+            TileType.Wall,
+            TileType.Mirror135,
+            TileType.Mirror45,
+            TileType.Shooter,
+            TileType.Pillar,
+            TileType.LaserVertical,
+        };
+    public List<TileType> horizontalImpassable = new List<TileType>(){
+            TileType.Player,
+            TileType.Block,
+            TileType.Wall,
+            TileType.Mirror135,
+            TileType.Mirror45,
+            TileType.Shooter,
+            TileType.Pillar,
+            TileType.LaserHorizontal,
+        };
+
+
+    public GridComponent laserHorizontalPrefab;
+    public GridComponent laserVerticalPrefab;
     public Vector2Int directionFacing;
+    private Vector2Int directionToMake;
+    private Vector2Int locationToMake;
     public GridComponent gridComponent;
-    public LaserBehavior firstChain;
+    public List<GridComponent> chain;
+
+    [SerializeField] private int num;
 
 
     private void Awake()
@@ -16,71 +43,70 @@ public class ShooterBehavior : MonoBehaviour
         gridComponent = GetComponent<GridComponent>();
     }
 
-    public enum Direction {
-        up,
-        down,
-        left,
-        right
-    }
 
     void Start() {
-        CreateLaser(directionFacing);
+        directionToMake = directionFacing;
+        locationToMake = gridComponent.gridPosition;
+        //CreateLaser(directionFacing);
     }
-
+    
 
 
     public void CreateLaser()
     {
-        bool laser1 = GridManager.CheckItemAtPosition(gridComponent, TileType.LaserHorizontal, gridComponent.gridPosition + directionFacing);
-        bool laser2 = GridManager.CheckItemAtPosition(gridComponent, TileType.LaserVertical, gridComponent.gridPosition + directionFacing);
-        //takes in list of unpassable to not spawn lazer
-        
-        if(!laser1 && !laser2)
+        if(directionFacing.x != 0)
         {
-            if(directionFacing.x != 0)
+            while (CheckImpassible(horizontalImpassable, laserHorizontalPrefab, directionToMake))
             {
-                laserHorizontalPrefab.transform.position = GridManager.convertToVector3(gridComponent.gridPosition + directionFacing);
-                laserHorizontalPrefab.direction = directionFacing;
-                firstChain = Instantiate(laserHorizontalPrefab, transform.parent);
 
-            } else if(directionFacing.y != 0)
+            }
+
+        } else if(directionFacing.y != 0)
+        {
+            while (CheckImpassible(verticalImpassable, laserVerticalPrefab, directionToMake))
             {
-                laserVerticalPrefab.direction = directionFacing;
-                laserVerticalPrefab.transform.position = GridManager.convertToVector3(gridComponent.gridPosition + directionFacing);
-                firstChain = Instantiate(laserVerticalPrefab, transform.parent);
+
             }
-            
         }
-    }
-    public void CreateLaser(Vector2Int dir)
-    {
+        directionToMake = directionFacing;
+        locationToMake = gridComponent.gridPosition;
 
-        if(dir.x != 0)
-        {
-            GridComponent test = GridManager.CheckItemAtPosition(gridComponent, laserHorizontalPrefab.horizontalImpassable, gridComponent.gridPosition + dir);
-            if (test == null) {
-                laserHorizontalPrefab.transform.position = GridManager.convertToVector3(gridComponent.gridPosition + dir);
-                laserHorizontalPrefab.direction = dir;
-                firstChain = Instantiate(laserHorizontalPrefab, transform.parent);
-            }
-            
-        }
-
-        else if(dir.y != 0)
-
-        {
-            GridComponent test = GridManager.CheckItemAtPosition(gridComponent, laserVerticalPrefab.verticalImpassable, gridComponent.gridPosition + dir);
-            if (test == null) {
-                laserVerticalPrefab.transform.position = GridManager.convertToVector3(gridComponent.gridPosition + dir);
-                laserVerticalPrefab.direction = dir;
-                firstChain = Instantiate(laserVerticalPrefab, transform.parent);
-            }
-
-        }
     }
 
     public void CutLaser()
     {
-        firstChain.DestroyChain();
+        while(chain.Count > 0)
+        {
+            GridComponent laser = chain[0];
+            chain.Remove(laser);
+            laser.RemoveFromGrid();
+            Destroy(laser.gameObject);
+        }
+        directionToMake = directionFacing;
+        locationToMake = gridComponent.gridPosition;
+
+    }
+
+    public bool CheckImpassible(List<TileType> types, GridComponent laserPrefab, Vector2Int direction)
+    {
+        GridComponent test = GridManager.CheckItemAtPosition(gridComponent, types, locationToMake + direction);
+        if (test == null)
+        {
+            laserPrefab.transform.position = 
+                GridManager.convertToVector3(locationToMake + direction);
+            chain.Add(Instantiate(laserPrefab, transform.parent));
+            locationToMake = locationToMake + direction;
+            return true;
+        }
+        else if (test.tileType == TileType.Mirror135 || test.tileType == TileType.Mirror45)
+        {
+            directionToMake = test.GetComponent<MirrorProperties>().reflectLaser(test.tileType, chain[chain.Count-1]);
+            locationToMake = locationToMake + direction; 
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
