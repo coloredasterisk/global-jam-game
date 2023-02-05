@@ -17,6 +17,11 @@ public enum TileType
     PushableForcefield,
     PressurePlate,
     Ice,
+    Shooter,
+    LaserVertical,
+    LaserHorizontal,
+    Mirror,
+    Pillar,
 }
 
 public enum MovementStatus
@@ -79,7 +84,7 @@ public class GridComponent : MonoBehaviour
         {
             if(moveType == MovementStatus.Normal)
             {
-                Debug.Log(name + "(GridComponent) was able to move in the direction " + moveDirection + " resulting in a new position: " + newPos);
+                //Debug.Log(name + "(GridComponent) was able to move in the direction " + moveDirection + " resulting in a new position: " + newPos);
                 InteractionLog.NewMovementLog(this, moveDirection, null);
             }
             returnMovement = true;
@@ -87,7 +92,7 @@ public class GridComponent : MonoBehaviour
             //ice
             if(GridManager.CheckItemAtPosition(GetComponentInParent<ParentState>(true).stateType, TileType.Ice, newPos))
             {
-                Debug.Log(name + "(GridComponent) was able to slide in the direction " + moveDirection + " resulting in a new position: " + newPos);
+                //Debug.Log(name + "(GridComponent) was able to slide in the direction " + moveDirection + " resulting in a new position: " + newPos);
                 MovePosition(x,y, MovementStatus.IcePush);
             }
         }
@@ -151,7 +156,7 @@ public class GridComponent : MonoBehaviour
             {
                 if(moveType == MovementStatus.Normal)
                 {
-                    Debug.Log(name + "(GridComponent) was able to move in the direction " + moveDirection + " resulting in a new position " + newPos + " by pushing " + pushable.name);
+                    //Debug.Log(name + "(GridComponent) was able to move in the direction " + moveDirection + " resulting in a new position " + newPos + " by pushing " + pushable.name);
                     InteractionLog.NewMovementLog(this, moveDirection, pushable);
                 } else if(moveType == MovementStatus.IcePush)
                 {
@@ -163,7 +168,7 @@ public class GridComponent : MonoBehaviour
             }
             return true;
         }
-        Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but something (immovable) " + newPos + " blocked it's path.");
+        //Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but something (immovable) " + newPos + " blocked it's path.");
         return false;
     }
 
