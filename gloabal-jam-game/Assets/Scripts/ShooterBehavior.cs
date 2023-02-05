@@ -57,7 +57,7 @@ public class ShooterBehavior : MonoBehaviour
 
         if(dir.x != 0)
         {
-            GridComponent test = GridManager.CheckItemAtPosition(gridComponent, laserHorizontalPrefab.impassable, gridComponent.gridPosition + dir);
+            GridComponent test = GridManager.CheckItemAtPosition(gridComponent, laserHorizontalPrefab.horizontalImpassable, gridComponent.gridPosition + dir);
             if (test == null) {
                 laserHorizontalPrefab.transform.position = GridManager.convertToVector3(gridComponent.gridPosition + dir);
                 laserHorizontalPrefab.direction = dir;
@@ -69,7 +69,7 @@ public class ShooterBehavior : MonoBehaviour
         else if(dir.y != 0)
 
         {
-            GridComponent test = GridManager.CheckItemAtPosition(gridComponent, laserVerticalPrefab.impassable, gridComponent.gridPosition + dir);
+            GridComponent test = GridManager.CheckItemAtPosition(gridComponent, laserVerticalPrefab.verticalImpassable, gridComponent.gridPosition + dir);
             if (test == null) {
                 laserVerticalPrefab.transform.position = GridManager.convertToVector3(gridComponent.gridPosition + dir);
                 laserVerticalPrefab.direction = dir;
