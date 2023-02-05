@@ -62,8 +62,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a963164724215e44891441479ac365e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laserHorizontalPrefab: {fileID: 4574984180547600384, guid: a4c955d7b11ea1544861d1f19de77faa, type: 3}
-  laserVerticalPrefab: {fileID: 4574984180547600384, guid: 474c0603f1760e143ba16eeb6eaaa976, type: 3}
 --- !u!212 &-8518207958442794516
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -105,7 +103,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 1449512142, guid: 4ad23f2c27bd05743918a842edb6cc23, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

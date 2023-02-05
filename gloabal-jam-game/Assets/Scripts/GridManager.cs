@@ -79,7 +79,7 @@ public class GridManager : MonoBehaviour
                 }
                 if (laserV != null)
                 {
-                    LaserBehavior laser = laserH.GetComponent<LaserBehavior>();
+                    LaserBehavior laser = laserV.GetComponent<LaserBehavior>();
                     laser.parent.CutLaser(laser.index);
                 }
             }
