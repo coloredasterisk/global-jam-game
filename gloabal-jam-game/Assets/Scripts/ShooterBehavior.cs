@@ -26,11 +26,13 @@ public class ShooterBehavior : MonoBehaviour
             if(directionFacing.x != 0)
             {
                 laserHorizontalPrefab.direction = directionFacing;
+                laserHorizontalPrefab.GetComponent<GridComponent>().gridPosition += directionFacing;
                 firstChain = Instantiate(laserHorizontalPrefab, transform.parent);
 
             } else if(directionFacing.y != 0)
             {
                 laserVerticalPrefab.direction = directionFacing;
+                laserVerticalPrefab.GetComponent<GridComponent>().gridPosition += directionFacing;
                 firstChain = Instantiate(laserVerticalPrefab, transform.parent);
             }
             

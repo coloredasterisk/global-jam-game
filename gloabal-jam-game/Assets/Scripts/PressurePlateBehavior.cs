@@ -30,7 +30,12 @@ public class PressurePlateBehavior : MonoBehaviour
         TurnListOff(turnObjectsOff);
         TurnListOn(turnObjectsOn);
         clicked.Play();
-        laserShooter.CreateLaser();
+
+        if(laserShooter != null)
+        {
+            laserShooter.CreateLaser();
+        }
+        
 
 
     }
@@ -43,7 +48,13 @@ public class PressurePlateBehavior : MonoBehaviour
         {
             clicked.Play();
         }
-        
+
+        if (laserShooter != null)
+        {
+            laserShooter.CutLaser();
+        }
+
+
     }
 
     private void TurnListOff(List<GridComponent> list)
