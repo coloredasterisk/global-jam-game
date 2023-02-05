@@ -66,6 +66,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnObjectsOn: []
   turnObjectsOff: []
+  onSprite: {fileID: -1448557595, guid: b25b4bf9bd564cb488c35808bb520c1e, type: 3}
+  offSprite: {fileID: 770078382, guid: b25b4bf9bd564cb488c35808bb520c1e, type: 3}
   isOn: 0
 --- !u!114 &7969097339579645804
 MonoBehaviour:

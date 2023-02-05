@@ -123,3 +123,5 @@ MonoBehaviour:
   chain: []
   hitPillar: {fileID: 0}
   isShooting: 0
+  onSprite: {fileID: 1706271611, guid: 03a1a93b24d9af74488466ed18b0c70e, type: 3}
+  offSprite: {fileID: -1172463214, guid: 03a1a93b24d9af74488466ed18b0c70e, type: 3}

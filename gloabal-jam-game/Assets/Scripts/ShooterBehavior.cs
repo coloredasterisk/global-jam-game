@@ -33,9 +33,14 @@ public class ShooterBehavior : MonoBehaviour
     private Vector2Int directionToMake;
     private Vector2Int locationToMake;
     public GridComponent gridComponent;
+
+    public List<MirrorProperties> mirrorChain = new List<MirrorProperties>();
     public List<GridComponent> chain;
     public PillarBehaviour hitPillar = null;
     public bool isShooting = false;
+
+    public Sprite onSprite;
+    public Sprite offSprite;
 
 
     private void Awake()
@@ -66,10 +71,12 @@ public class ShooterBehavior : MonoBehaviour
         {
             CutLaser(0);
             CreateLaser();
+            GetComponent<SpriteRenderer>().sprite = onSprite;
         }
         else
         {
             CutLaser(0);
+            GetComponent<SpriteRenderer>().sprite = offSprite;
         }
     }
 
@@ -110,7 +117,13 @@ public class ShooterBehavior : MonoBehaviour
             hitPillar.SwitchSprites(false);
             hitPillar.pressure.SwitchOff();
             hitPillar = null;
+        }
 
+        while (mirrorChain.Count > index)
+        {
+            MirrorProperties mirror = mirrorChain[index];
+            mirrorChain.Remove(mirror);
+            mirror.ResetMirror();
         }
 
     }
@@ -149,6 +162,7 @@ public class ShooterBehavior : MonoBehaviour
         else if (test.tileType == TileType.Mirror135 || test.tileType == TileType.Mirror45)
         {
             directionToMake = test.GetComponent<MirrorProperties>().reflectLaser(test.tileType, chain[chain.Count-1]);
+            mirrorChain.Add(test.GetComponent<MirrorProperties>());
             locationToMake = locationToMake + direction; 
             return true;
         }

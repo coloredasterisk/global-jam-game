@@ -62,6 +62,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a963164724215e44891441479ac365e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  intialSprite: {fileID: 0}
+  topleft: {fileID: -110457456, guid: 4ad23f2c27bd05743918a842edb6cc23, type: 3}
+  topRight: {fileID: 312497703, guid: 4ad23f2c27bd05743918a842edb6cc23, type: 3}
+  bottomleft: {fileID: 169591556, guid: 4ad23f2c27bd05743918a842edb6cc23, type: 3}
+  bottomright: {fileID: 889290476, guid: 4ad23f2c27bd05743918a842edb6cc23, type: 3}
 --- !u!212 &-7876109954227502710
 SpriteRenderer:
   m_ObjectHideFlags: 0

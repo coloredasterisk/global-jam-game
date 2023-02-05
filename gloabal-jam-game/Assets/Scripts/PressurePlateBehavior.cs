@@ -7,6 +7,10 @@ public class PressurePlateBehavior : MonoBehaviour
     private AudioSource clicked;
     public List<GridComponent> turnObjectsOn;
     public List<GridComponent> turnObjectsOff;
+
+    public Sprite onSprite;
+    public Sprite offSprite;
+
     public bool isOn = false;
 
     private void Start()
@@ -28,6 +32,7 @@ public class PressurePlateBehavior : MonoBehaviour
         isOn = true;
         TurnListOff(turnObjectsOff);
         TurnListOn(turnObjectsOn);
+        GetComponent<SpriteRenderer>().sprite = onSprite;
         //clicked.Play();
 
 
@@ -41,6 +46,7 @@ public class PressurePlateBehavior : MonoBehaviour
         {
             clicked.Play();
         }
+        GetComponent<SpriteRenderer>().sprite = offSprite;
 
 
 
