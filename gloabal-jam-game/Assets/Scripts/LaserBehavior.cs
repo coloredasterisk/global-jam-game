@@ -50,7 +50,7 @@ public class LaserBehavior : MonoBehaviour
             do if statement for vertical
         }*/
         CheckImpassible(List < TileType > verticalImpassable);
-        CheckImpassible(List < TileType > horizontalImpassable)
+        CheckImpassible(List < TileType > horizontalImpassable);
 
 
     }
