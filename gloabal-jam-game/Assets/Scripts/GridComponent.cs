@@ -17,6 +17,8 @@ public enum TileType
     PushableForcefield,
     PressurePlate,
     Ice,
+    Mirror45,
+    Mirror135
 }
 
 public enum MovementStatus

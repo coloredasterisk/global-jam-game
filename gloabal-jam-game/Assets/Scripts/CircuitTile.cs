@@ -5,10 +5,7 @@ using UnityEngine;
 public class CircuitTile : MonoBehaviour
 {
     private GridComponent gridComponent;
-
     
-
-
     public enum outputDirection 
     {
         Left,
@@ -20,10 +17,10 @@ public class CircuitTile : MonoBehaviour
     private List<outputDirection> circuitType;
     private bool powerStatus = false;
 
-    public 
     void Start()
     {
         gridComponent = GetComponent<GridComponent>();
+
     }
 
     // Update is called once per frame
