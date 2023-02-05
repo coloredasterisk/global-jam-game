@@ -13,4 +13,17 @@ public class LaserBehavior : MonoBehaviour
         laserPrefab.gridPosition = GetComponent<GridComponent>().gridPosition + direction;
         chainAhead = Instantiate(laserPrefab.gameObject, transform.parent);
     }
+
+    public void DestroyChain()
+    {
+        chainAhead.GetComponent<LaserBehavior>().DestroyChain();
+        if (chainAhead == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
+        
+    }
+
 }

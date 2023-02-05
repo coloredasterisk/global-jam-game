@@ -24,8 +24,10 @@ public class GridManager : MonoBehaviour
         TileType.Player,
         TileType.Wall,
         TileType.Shooter,
-        TileType.Mirror,
+        TileType.Mirror45,
+        TileType.Mirror135,
     };
+    
     //overloaded function
     public static bool InsertSelf(GridComponent gridComp)
     {
@@ -52,7 +54,8 @@ public class GridManager : MonoBehaviour
                 return false;
             }
 
-            GridComponent pressurePlate = CheckItemAtPosition(gridComp.GetComponentInParent<ParentState>(true).stateType, TileType.PressurePlate, position);
+
+            GridComponent pressurePlate = CheckItemAtPosition(gridComp, TileType.PressurePlate, position);
             if(pressurePlate != null){
                 pressurePlate.GetComponent<PressurePlateBehavior>().SwitchOn();
             }
@@ -114,6 +117,10 @@ public class GridManager : MonoBehaviour
         }
     
         return null;
+    }
+    public static GridComponent CheckItemAtPosition(GridComponent location, TileType type, Vector2Int position)
+    {
+        return CheckItemAtPosition(location.GetComponentInParent<ParentState>(true).stateType, type, position);
     }
     public static GridComponent CheckItemAtPosition(GridComponent location, TileType type, Vector3 position)
     {
@@ -218,10 +225,14 @@ public class GridManager : MonoBehaviour
             //dont add if two objects collide
             if (solidInsert && solidObjects.Contains(grid.tileType))
             {
-                if()
+                if(grid.tileType == TileType.Mirror135 || grid.tileType == TileType.Mirror45)
+                {
+                    //call function
+                }
                 return true;
             }
         }
+        return false;
     }
 
     //Move the object provided to a new given position
