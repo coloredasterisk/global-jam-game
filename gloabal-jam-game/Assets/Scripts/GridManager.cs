@@ -23,6 +23,8 @@ public class GridManager : MonoBehaviour
         TileType.Block,
         TileType.Player,
         TileType.Wall,
+        TileType.Shooter,
+        TileType.Mirror,
     };
     //overloaded function
     public static bool InsertSelf(GridComponent gridComp)
@@ -197,6 +199,23 @@ public class GridManager : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public static bool LaserCollision(TileType typeToCheck, StateType location, Vector2Int position)
+    {
+        bool solidInsert = solidObjects.Contains(typeToCheck);
+        List<GridComponent> gridPosition = retrieveCell(location, position);
+
+        if (gridPosition == null) return false;
+
+        foreach (GridComponent grid in gridPosition)
+        {
+            //dont add if two objects collide
+            if (solidInsert && solidObjects.Contains(grid.tileType))
+            {
+                return true;
+            }
+        }
     }
 
     //Move the object provided to a new given position
