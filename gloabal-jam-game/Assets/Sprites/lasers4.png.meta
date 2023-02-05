@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7bc62245da9ccf542a610022ac342bfd
+guid: 802055c2efd32614d846ee8a67fe935e
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 69
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -115,175 +115,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: lasers4_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 210
-        width: 69
-        height: 69
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 895b8938957976348860588864b2dc7f
-      internalID: 1933020903
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: lasers4_1
-      rect:
-        serializedVersion: 2
-        x: 69
-        y: 210
-        width: 69
-        height: 69
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: aec370d083ff6da428d31fab3dc8d957
-      internalID: 694427011
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: lasers4_2
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 141
-        width: 69
-        height: 69
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dd6ee69c57692704bad7908da9d9a299
-      internalID: 1645183889
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: lasers4_3
-      rect:
-        serializedVersion: 2
-        x: 69
-        y: 141
-        width: 69
-        height: 69
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 14544b3cabe81e74c89ec93962196aa4
-      internalID: -613150211
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: lasers4_4
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 69
-        width: 69
-        height: 69
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c73db7f97327ab94fbf49d41120e2901
-      internalID: -693825503
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: lasers4_5
-      rect:
-        serializedVersion: 2
-        x: 68
-        y: 69
-        width: 69
-        height: 69
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 848c1d3657f1ce64caf9b59ce4e6cf02
-      internalID: 693740511
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: lasers4_6
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 69
-        height: 68
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5ac317992b22fba4dbc30daef50da064
-      internalID: -1841728291
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: lasers4_7
-      rect:
-        serializedVersion: 2
-        x: 68
-        y: 0
-        width: 69
-        height: 68
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 1}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 421b011514f091345ba5e2ac1778375b
-      internalID: 567545125
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -294,15 +126,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      lasers4_5: 693740511
-      lasers4_3: -613150211
-      lasers4_1: 694427011
-      lasers4_0: 1933020903
-      lasers4_7: 567545125
-      lasers4_2: 1645183889
-      lasers4_4: -693825503
-      lasers4_6: -1841728291
+    nameFileIdTable: {}
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
