@@ -42,12 +42,16 @@ public class PlaceBlockController : MonoBehaviour
         } else if (Input.GetKeyUp(KeyCode.Alpha3)){
             enableBlock(3);
         }else if (Input.GetKeyUp(KeyCode.Alpha4)){
+            Debug.Log("turned on 4");
             enableBlock(4);
         }else if (Input.GetKeyUp(KeyCode.Alpha5)){
+            Debug.Log("turned on 5");
             enableBlock(5);
         } else if (Input.GetKeyUp(KeyCode.Alpha6)){
+            Debug.Log("turned on 6");
             enableBlock(6);
         } else if (Input.GetKeyUp(KeyCode.Alpha7)){
+            Debug.Log("turned on 7");
             enableBlock(7);
         } 
     }
@@ -70,12 +74,15 @@ public class PlaceBlockController : MonoBehaviour
                         GameObject newBlock = Instantiate(block4,FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
                         newBlock.transform.position = checkPosition();
                     }else if (i==4) {
+                        Debug.Log("placed");
                         GameObject newBlock = Instantiate(block5,FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
                         newBlock.transform.position = checkPosition();
                     }else if (i==5) {
+                        Debug.Log("placed");
                         GameObject newBlock = Instantiate(block6,FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
                         newBlock.transform.position = checkPosition();
                     }else if (i==6) {
+                        Debug.Log("placed");
                         GameObject newBlock = Instantiate(block7,FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
                         newBlock.transform.position = checkPosition();
                     }
