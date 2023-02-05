@@ -16,6 +16,14 @@ public enum TileType
     PlayerForcefield,
     PushableForcefield,
     PressurePlate,
+    Ice,
+}
+
+public enum MovementStatus
+{
+    Normal,
+    Undo,
+    IcePush,
 }
 
 public class GridComponent : MonoBehaviour
@@ -49,11 +57,11 @@ public class GridComponent : MonoBehaviour
         originalPosition = gridPosition;
         AddToGrid(true);
     }
-    public bool MovePosition(Vector2Int v, bool undo)
+    public bool MovePosition(Vector2Int v, MovementStatus moveType)
     {
-        return MovePosition(v.x, v.y, undo);
+        return MovePosition(v.x, v.y, moveType);
     }
-    public bool MovePosition(int x, int y, bool undo)
+    public bool MovePosition(int x, int y, MovementStatus moveType)
     {
         bool returnMovement = false;
         Vector2Int moveDirection = new Vector2Int(x, y);
@@ -64,18 +72,24 @@ public class GridComponent : MonoBehaviour
         if(!moved){
             
             StateType state = GetComponentInParent<ParentState>().stateType;
-            bool similarPush = CheckPushable(state, newPos, moveDirection, undo);
+            bool similarPush = CheckPushable(state, newPos, moveDirection, moveType);
             returnMovement = similarPush;
         }
         else
         {
-            if(undo == false)
+            if(moveType == MovementStatus.Normal)
             {
-                //Debug.Log(name + "(GridComponent) was able to move in the direction " + moveDirection + " resulting in a new position: " + newPos);
+                Debug.Log(name + "(GridComponent) was able to move in the direction " + moveDirection + " resulting in a new position: " + newPos);
                 InteractionLog.NewMovementLog(this, moveDirection, null);
             }
             returnMovement = true;
 
+            //ice
+            if(GridManager.CheckItemAtPosition(GetComponentInParent<ParentState>(true).stateType, TileType.Ice, newPos))
+            {
+                Debug.Log(name + "(GridComponent) was able to slide in the direction " + moveDirection + " resulting in a new position: " + newPos);
+                MovePosition(x,y, MovementStatus.IcePush);
+            }
         }
         
         if(GetComponent<PlayerController>() != null)
@@ -124,25 +138,32 @@ public class GridComponent : MonoBehaviour
         }
         return false;
     }
-    private bool CheckPushable(StateType state, Vector2Int newPos, Vector2Int moveDirection, bool undo)
+    private bool CheckPushable(StateType state, Vector2Int newPos, Vector2Int moveDirection, MovementStatus moveType)
     {
         //Check if object is pushable 
         GridComponent pushable = GridManager.CheckItemAtPosition(state, TileType.Block, newPos);
+        if (pushable == null) pushable = GridManager.CheckItemAtPosition(state, TileType.Player, newPos);
+
         if (pushable != null)
         {
-            pushable.MovePosition(moveDirection, undo);
+            pushable.MovePosition(moveDirection, moveType);
             if (AttemptToMove(this, newPos))
             {
-                if(undo == false)
+                if(moveType == MovementStatus.Normal)
                 {
-                    //Debug.Log(name + "(GridComponent) was able to move in the direction " + moveDirection + " resulting in a new position " + newPos + " by pushing " + pushable.name);
+                    Debug.Log(name + "(GridComponent) was able to move in the direction " + moveDirection + " resulting in a new position " + newPos + " by pushing " + pushable.name);
                     InteractionLog.NewMovementLog(this, moveDirection, pushable);
+                } else if(moveType == MovementStatus.IcePush)
+                {
+                    InteractionLog.history.RemoveAt(InteractionLog.history.Count - 1);
+                    InteractionLog.NewMovementLog(pushable, moveDirection, this);
+                    InteractionLog.NewMovementLog(pushable, moveDirection, null);
                 }
                 
             }
             return true;
         }
-        //Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but something (immovable) " + newPos + " blocked it's path.");
+        Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but something (immovable) " + newPos + " blocked it's path.");
         return false;
     }
 

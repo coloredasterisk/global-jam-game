@@ -50,7 +50,7 @@ public class GridManager : MonoBehaviour
                 return false;
             }
 
-            GridComponent pressurePlate = CheckItemAtPosition(gridComp.GetComponentInParent<ParentState>().stateType, TileType.PressurePlate, position);
+            GridComponent pressurePlate = CheckItemAtPosition(gridComp.GetComponentInParent<ParentState>(true).stateType, TileType.PressurePlate, position);
             if(pressurePlate != null){
                 pressurePlate.GetComponent<PressurePlateBehavior>().SwitchOn();
             }
@@ -206,6 +206,7 @@ public class GridManager : MonoBehaviour
         {
             if (RemoveSelf(gridComp))
             {
+                
                 return true;
             }
         } 

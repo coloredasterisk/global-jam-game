@@ -71,7 +71,7 @@ public class InteractionLog : MonoBehaviour
 
             if(recentLog.interaction == Interactions.Moved)
             {
-                recentLog.movementLog.movedObject.MovePosition(MovementInverse(recentLog.movementLog), true);
+                recentLog.movementLog.movedObject.MovePosition(MovementInverse(recentLog.movementLog), MovementStatus.Undo);
                 history.RemoveAt(history.Count - 1);
                 //undo again to push back pushabled objects
                 if (recentLog.movementLog.pushedObject != null)

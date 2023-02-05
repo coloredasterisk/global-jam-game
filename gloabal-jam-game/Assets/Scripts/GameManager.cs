@@ -150,6 +150,8 @@ public class GameManager : MonoBehaviour
             dynamic.DynamicReset();
         }
 
+        InteractionLog.history.Clear();
+
     }
     public void ResetPlayerPosition(GridComponent player, GridComponent spawnPoint)
     {

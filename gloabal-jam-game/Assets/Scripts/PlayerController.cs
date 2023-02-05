@@ -62,13 +62,13 @@ public class PlayerController : MonoBehaviour
             else if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
             {
                 animator.SetFloat("MoveY", 1);
-                bool moved = gridComponent.MovePosition(0, 1, false);
+                bool moved = gridComponent.MovePosition(0, 1, MovementStatus.Normal);
                 PlayStepSound(moved);
             }
             else if (Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))
             {
                 animator.SetFloat("MoveY", -1);
-                bool moved = gridComponent.MovePosition(0, -1, false);
+                bool moved = gridComponent.MovePosition(0, -1, MovementStatus.Normal);
                 PlayStepSound(moved);
             }
 
@@ -79,13 +79,13 @@ public class PlayerController : MonoBehaviour
             else if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
             {
                 animator.SetFloat("MoveX", -1);
-                bool moved = gridComponent.MovePosition(-1, 0, false);
+                bool moved = gridComponent.MovePosition(-1, 0, MovementStatus.Normal);
                 PlayStepSound(moved);
             }
             else if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
             {
                 animator.SetFloat("MoveX", 1);
-                bool moved = gridComponent.MovePosition(1, 0, false);
+                bool moved = gridComponent.MovePosition(1, 0, MovementStatus.Normal);
                 PlayStepSound(moved);
             } 
             
