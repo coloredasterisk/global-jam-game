@@ -8,6 +8,7 @@ using UnityEngine;
 public class GridManager : MonoBehaviour
 {
     //Stores all objects with a grid system, items that would overlap are stored in a list
+    public static Vector2Int left,up,down,right;
     public static Dictionary<Vector2Int, List<GridComponent>> pastGridPosition = new Dictionary<Vector2Int, List<GridComponent>>();
     public static Dictionary<Vector2Int, List<GridComponent>> presentGridPosition = new Dictionary<Vector2Int, List<GridComponent>>();
 
@@ -26,6 +27,7 @@ public class GridManager : MonoBehaviour
         TileType.Shooter,
         TileType.Mirror45,
         TileType.Mirror135,
+        TileType.Pillar,
     };
     
     //overloaded function
@@ -91,6 +93,8 @@ public class GridManager : MonoBehaviour
             {
                 pressurePlate.GetComponent<PressurePlateBehavior>().SwitchOff();
             }
+
+
             
 
 
