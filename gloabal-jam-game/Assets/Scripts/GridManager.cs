@@ -91,6 +91,11 @@ public class GridManager : MonoBehaviour
                     shooter.UpdateLaser();
                 }
             }
+            if(gridComp.tileType == TileType.Wall)
+            {
+                Debug.Log("WAll added" + gridComp.name);
+            }
+
             
                 
         }
@@ -114,8 +119,18 @@ public class GridManager : MonoBehaviour
         List<GridComponent> pointPosition = retrieveCell(gridComp, gridComp.gridPosition);
         if (pointPosition != null)
         {
-            pointPosition.Remove(gridComp);
-            if(pointPosition.Count <= 0)
+            //Debug.Log("WE are going to remove this:" + gridComp.name + "List size:" + pointPosition.Count);
+            for(int index = 0; index < pointPosition.Count; index++)
+            {
+                GridComponent gc = pointPosition[index];
+                if (gc == gridComp)
+                {
+                    index--;
+                    pointPosition.Remove(gridComp);
+                }
+            }
+           // Debug.Log("AFter removal List size:" + pointPosition.Count);
+            if (pointPosition.Count <= 0)
             {//delete empty list
                 GetGridState(gridComp).Remove(gridComp.gridPosition);
             }
@@ -126,9 +141,13 @@ public class GridManager : MonoBehaviour
             {
                 pressurePlate.GetComponent<PressurePlateBehavior>().SwitchOff();
             }
+            //Debug.Log("AFter werid stuff List size:" + pointPosition.Count);
 
 
-
+            if (pointPosition.Count > 0)
+            {
+                Debug.Log(pointPosition[0] + gridComp.name);
+            }
 
 
             return true;
