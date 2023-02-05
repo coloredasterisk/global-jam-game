@@ -186,6 +186,7 @@ public class LevelBehavior : MonoBehaviour
                 {
                     GameManager manager = FindObjectOfType<GameManager>();
                     manager.ChangeLevel(level.level);
+                    manager.RestartLevel();
                     break;
                 }
             }
