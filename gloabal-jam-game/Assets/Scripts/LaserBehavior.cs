@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class LaserBehavior : MonoBehaviour
@@ -11,7 +12,7 @@ public class LaserBehavior : MonoBehaviour
 
 {
 
-    public List<TileType> impassable = new List<TileType>(){
+    public List<TileType> verticalImpassable = new List<TileType>(){
             TileType.Player,
             TileType.Block,
             TileType.Wall,
@@ -19,7 +20,17 @@ public class LaserBehavior : MonoBehaviour
             TileType.Mirror45,
             TileType.Shooter,
             TileType.Pillar,
-
+            TileType.LaserVertical,
+        };
+    public List<TileType> horizontalImpassable = new List<TileType>(){
+            TileType.Player,
+            TileType.Block,
+            TileType.Wall,
+            TileType.Mirror135,
+            TileType.Mirror45,
+            TileType.Shooter,
+            TileType.Pillar,
+            TileType.LaserHorizontal,
         };
     public GridComponent laserPrefab;
     public Vector2Int direction;
@@ -33,20 +44,14 @@ public class LaserBehavior : MonoBehaviour
     public void CreateSelf()
     {
         //check if it's horizontal/vertical
+        CheckImpassible(verticalImpassable);
+        CheckImpassible(horizontalImpassable);
 
-        impassable.Add(laserPrefab.tileType);
-        GridComponent test = GridManager.CheckItemAtPosition(laserPrefab, impassable, laserPrefab.gridPosition + direction);
-        if (test == null)
-        {
-            laserPrefab.transform.position = GridManager.convertToVector3(laserPrefab.gridPosition + direction);
-            chainAhead = Instantiate(laserPrefab.gameObject, transform.parent);
-        }
-        
     }
 
     public void DestroyChain()
     {
-        
+        Debug.Log("Called " + name);
         if (chainAhead == null)
         {
             Destroy(gameObject);
@@ -55,6 +60,16 @@ public class LaserBehavior : MonoBehaviour
         chainAhead.GetComponent<LaserBehavior>().DestroyChain();
 
 
+    }
+
+    public void CheckImpassible(List<TileType> types)
+    {
+        GridComponent test = GridManager.CheckItemAtPosition(laserPrefab, types, laserPrefab.gridPosition + direction);
+        if (test == null)
+        {
+            laserPrefab.transform.position = GridManager.convertToVector3(laserPrefab.gridPosition + direction);
+            chainAhead = Instantiate(laserPrefab.gameObject, transform.parent);
+        }
     }
 
     public static bool LaserCollision(List<TileType> typesToCheck, List<TileType> restricted, StateType location, Vector2Int position)
