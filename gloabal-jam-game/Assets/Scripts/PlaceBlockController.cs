@@ -6,6 +6,8 @@ public class PlaceBlockController : MonoBehaviour
 {
     private PlayerController player;
     private GridComponent gridComponent;
+
+    public RectTransform selector;
     
 
     public GameObject block1,block2,block3,block4,block5,block6,block7;
@@ -36,21 +38,28 @@ public class PlaceBlockController : MonoBehaviour
     void changeBlock()
     {
         if (Input.GetKeyUp(KeyCode.Alpha1)) {
+            selector.localPosition = new Vector3(25, 150, 0);
             enableBlock(1);
         } else if (Input.GetKeyUp(KeyCode.Alpha2)){
+            selector.localPosition = new Vector3(25, 100, 0);
             enableBlock(2);
         } else if (Input.GetKeyUp(KeyCode.Alpha3)){
+            selector.localPosition = new Vector3(25, 50, 0);
             enableBlock(3);
         }else if (Input.GetKeyUp(KeyCode.Alpha4)){
+            selector.localPosition = new Vector3(25, 0, 0);
             Debug.Log("turned on 4");
             enableBlock(4);
         }else if (Input.GetKeyUp(KeyCode.Alpha5)){
+            selector.localPosition = new Vector3(25, -50, 0);
             Debug.Log("turned on 5");
             enableBlock(5);
         } else if (Input.GetKeyUp(KeyCode.Alpha6)){
+            selector.localPosition = new Vector3(25, -100, 0);
             Debug.Log("turned on 6");
             enableBlock(6);
         } else if (Input.GetKeyUp(KeyCode.Alpha7)){
+            selector.localPosition = new Vector3(25, -150, 0);
             Debug.Log("turned on 7");
             enableBlock(7);
         } 

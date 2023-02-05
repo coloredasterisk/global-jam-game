@@ -83,6 +83,16 @@ public class GridManager : MonoBehaviour
                     laser.parent.CutLaser(laser.index);
                 }
             }
+
+            if (solid)
+            {
+                bool coin = CheckItemAtPosition(gridComp, TileType.EndGame, position);
+                if (coin)
+                {
+                    FindObjectOfType<GameManager>(true).EndGame();
+                }
+            }
+
             if (updateWorld)
             {
                 //update all shooters

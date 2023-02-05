@@ -23,6 +23,7 @@ public enum TileType
     LaserVertical,
     LaserHorizontal,
     Pillar,
+    EndGame,
 }
 
 public enum MovementStatus
@@ -103,6 +104,7 @@ public class GridComponent : MonoBehaviour
             LevelBehavior level = FindObjectOfType<GameManager>().currentLevel;
             //check if player is out of level bounds
             level.checkBoundsBehavior(this);
+            
         }
         return returnMovement;
     }

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
@@ -75,6 +76,7 @@ public class GameManager : MonoBehaviour
         //allow user to hold undo button and undo speeds up based on time held down
         if (Input.GetKey(KeyCode.U))
         {
+            /*
             if(undoTimer <= 0)
             {
                 undoTimer = undoInterval[intervalIndex];
@@ -85,7 +87,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 undoTimer -= Time.deltaTime;
-            }
+            }*/
         }
         else
         {
@@ -207,6 +209,10 @@ public class GameManager : MonoBehaviour
         item.transform.parent = graveYard.transform;
     }
 
+    public void EndGame()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
 
 
 }
