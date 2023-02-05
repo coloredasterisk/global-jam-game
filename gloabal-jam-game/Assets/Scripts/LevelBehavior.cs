@@ -11,22 +11,6 @@ public enum AdjacentType
     Up,
     Down,
 }
-public enum TurnAction
-{
-    FaceLeft,
-    FaceRight,
-    FaceUp,
-    FaceDown,
-
-    MoveLeft,
-    MoveRight,
-    MoveUp,
-    MoveDown,
-
-    SwitchState,
-    CreateBlock,
-
-}
 
 public class LevelBehavior : MonoBehaviour
 {
@@ -41,6 +25,8 @@ public class LevelBehavior : MonoBehaviour
     public bool isPresent = true;
     public GameObject pastObject;
     public GameObject presentObject;
+    public GameObject dynamicPast;
+    public GameObject dynamicPresent;
     public GameObject clonedParent;
     public GameObject createdParent;
 
@@ -56,6 +42,7 @@ public class LevelBehavior : MonoBehaviour
     {
         public AdjacentType type;
         public LevelBehavior level;
+        
     }
 
     public void ToggleVisibleStates()
@@ -72,6 +59,8 @@ public class LevelBehavior : MonoBehaviour
 
         if (isPresent)//switch to past
         {
+            InteractionLog.NewSwitchedLog(isPresent, this, null, null);
+
             isPresent = false;
             pastObject.SetActive(true);
             presentObject.SetActive(false);
@@ -88,7 +77,7 @@ public class LevelBehavior : MonoBehaviour
 
         }
     }
-    public void SetStates(LevelBehavior levelToSwitch, bool present)
+    public static void SetStates(LevelBehavior levelToSwitch, bool present)
     {
         if (present)//switch to present
         {
@@ -108,21 +97,40 @@ public class LevelBehavior : MonoBehaviour
 
     void ReplaceSection()
     {
+        
         Transform[] clonedChildren = clonedParent.transform.GetComponentsInChildren<Transform>();
+        //prepare a copy of data values in order to recreate destroyed objects
+        List<InteractionLog.ReconstructObject> reconstructObjects = new List<InteractionLog.ReconstructObject>();
+        List<GameObject> storedCloneObjects = new List<GameObject>();
+
+        //Destroy all objects in clonedObjects
         foreach (Transform child in clonedChildren)
         {
-            if (child.gameObject.name == "ClonedObjects") continue;
+            if (child.gameObject.name.Contains("ClonedObjects")) continue;
             GridComponent compo = child.gameObject.GetComponentInChildren<GridComponent>();
             if (compo != null) compo.RemoveFromGrid();
-            Destroy(child.gameObject);
-        }
 
+            reconstructObjects.Add(InteractionLog.PrepareReconstruction(compo, clonedParent.transform));
+
+            FindObjectOfType<GameManager>().SendToGraveyard(child.gameObject);
+            //Destroy(child.gameObject);
+        }
+        
+
+        //Clone all objects in createdObjects and push them into clonedObjects
         Transform[] createdChildren = createdParent.transform.GetComponentsInChildren<Transform>();
         foreach (Transform child in createdChildren)
         {
-            if (child.gameObject.name == "CreatedObjects") continue;
-            Instantiate(child.gameObject, clonedParent.transform);
+            if (child.gameObject.name.Contains("CreatedObjects")) continue;
+            GameObject childClone = Instantiate(child.gameObject, clonedParent.transform);
+
+            storedCloneObjects.Add(childClone);
         }
+        InteractionLog.NewSwitchedLog(isPresent, this, storedCloneObjects, reconstructObjects);
+
+
+        //Debug.Log("Stored isPresent:" + isPresent + " \nlist of:" + storedCloneObjects + " \nlist of:" + reconstructObjects);
+
     }
 
     public Vector2Int getVerticalBounds()
@@ -184,10 +192,17 @@ public class LevelBehavior : MonoBehaviour
     }
     public void EraseChildrenFromGrid()
     {
-        GridComponent[] children = GetComponentsInChildren<GridComponent>();
-        foreach(GridComponent child in children)
+        EraseSpecificChildrenFromGrid(clonedParent);
+        EraseSpecificChildrenFromGrid(createdParent);
+        EraseSpecificChildrenFromGrid(dynamicPresent);
+        EraseSpecificChildrenFromGrid(dynamicPast);
+    }
+    private void EraseSpecificChildrenFromGrid(GameObject parent)
+    {
+        for(int i = 0; i < parent.transform.childCount; i++) 
         {
-            child.RemoveFromGrid();
+            Debug.Log(parent.transform.GetChild(i).name);
+            parent.transform.GetChild(i).GetComponent<GridComponent>().RemoveFromGrid();
         }
     }
 }
