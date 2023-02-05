@@ -37,11 +37,7 @@ public class PlayerController : MonoBehaviour
                 holdTimer += Time.deltaTime;
             }
         }
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            GameObject gm = Instantiate(this.gameObject);
-            gm.transform.parent = null;
-        }
+
 
 
         if (!gridComponent.isLerping)
