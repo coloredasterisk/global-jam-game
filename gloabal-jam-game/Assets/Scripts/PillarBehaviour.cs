@@ -6,7 +6,7 @@ public class PillarBehaviour : MonoBehaviour
 {
 
 
-    private PressurePlateBehavior pressure;
+    public PressurePlateBehavior pressure;
     private ShooterBehavior laser;
     private GridComponent gc;
 
@@ -21,14 +21,14 @@ public class PillarBehaviour : MonoBehaviour
         laser = GetComponent<ShooterBehavior>();
         gc = GetComponent<GridComponent>();
     }
-
+    /*
     // Update is called once per frame
     void Update()
     {
         checkLaser();
-    }
+    }*/
 
-
+    
     public void checkLaser(){
         Vector2Int leftPosition = gc.gridPosition + new Vector2Int (-1,0);
         Vector2Int rightPosition = gc.gridPosition +  new Vector2Int (1,0);

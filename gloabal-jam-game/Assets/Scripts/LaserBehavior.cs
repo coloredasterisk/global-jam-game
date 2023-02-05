@@ -11,5 +11,6 @@ public class LaserBehavior : MonoBehaviour
 
 
 {
-
+    public ShooterBehavior parent;
+    public int index;
 }

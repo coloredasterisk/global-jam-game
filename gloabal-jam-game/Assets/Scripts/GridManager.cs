@@ -29,11 +29,11 @@ public class GridManager : MonoBehaviour
         TileType.Mirror135,
         TileType.Pillar,
     };
-    
-    //overloaded function
-    public static bool InsertSelf(GridComponent gridComp)
+
+//overloaded function
+    public static bool InsertSelf(GridComponent gridComp, bool updateWorld)
     {
-        return InsertSelf(gridComp, gridComp.gridPosition);
+        return InsertSelf(gridComp, gridComp.gridPosition, updateWorld);
     }
     /// <summary>
     /// This function adds a gridComp to a dictionary based on position.
@@ -44,7 +44,7 @@ public class GridManager : MonoBehaviour
     /// <param name="gridComp">The GridComponent to be inserted</param>
     /// <param name="position">The position to be stored in the dictionary</param>
     /// <returns></returns>
-    public static bool InsertSelf(GridComponent gridComp, Vector2Int position)
+    public static bool InsertSelf(GridComponent gridComp, Vector2Int position, bool updateWorld)
     {
         List<GridComponent> pointPosition = retrieveCell(gridComp, position);
 
@@ -55,20 +55,53 @@ public class GridManager : MonoBehaviour
             {
                 return false;
             }
+            bool solid = solidObjects.Contains(gridComp.tileType);
+            if (solid)
+            {
+                GridComponent pressurePlate = CheckItemAtPosition(gridComp, TileType.PressurePlate, position);
+                if (pressurePlate != null)
+                {
+                    pressurePlate.GetComponent<PressurePlateBehavior>().SwitchOn();
+                }
 
-
-            GridComponent pressurePlate = CheckItemAtPosition(gridComp, TileType.PressurePlate, position);
-            if(pressurePlate != null){
-                pressurePlate.GetComponent<PressurePlateBehavior>().SwitchOn();
             }
-
+            
             pointPosition.Add(gridComp);
+
+            if (solid)
+            {
+                GridComponent laserH = CheckItemAtPosition(gridComp, TileType.LaserHorizontal, position);
+                GridComponent laserV = CheckItemAtPosition(gridComp, TileType.LaserVertical, position);
+                if (laserH != null)
+                {
+                    LaserBehavior laser = laserH.GetComponent<LaserBehavior>();
+                    laser.parent.CutLaser(laser.index);
+                }
+                if (laserV != null)
+                {
+                    LaserBehavior laser = laserH.GetComponent<LaserBehavior>();
+                    laser.parent.CutLaser(laser.index);
+                }
+            }
+            if (updateWorld)
+            {
+                //update all shooters
+                foreach (ShooterBehavior shooter in FindObjectsOfType<ShooterBehavior>())
+                {
+                    shooter.UpdateLaser();
+                }
+            }
+            
+                
         }
         else
         {//make new list if the list does not exist
-            GetGridState(gridComp).Add(position, new List<GridComponent>() { gridComp });
-        }
 
+            List<GridComponent> gridList = new List<GridComponent>() { gridComp };
+            GetGridState(gridComp).Add(position, gridList);
+
+        }
+        //Debug.Log(retrieveCell(gridComp, position));
         return true;
     }
     /// <summary>
@@ -95,12 +128,13 @@ public class GridManager : MonoBehaviour
             }
 
 
-            
+
 
 
             return true;
         }
-        Debug.Log("This GridComponent cannot be found and thus cannot be removed");
+        //Debug.Log("GridCOmp :"+ gridComp.name + "Position: " + gridComp.gridPosition);
+        //Debug.Log("This GridComponent cannot be found and thus cannot be removed");
         return false;
     }
     public static GridComponent CheckItemAtPosition(StateType location, TileType type, Vector2Int position)
@@ -202,6 +236,10 @@ public class GridManager : MonoBehaviour
             if (solidInsert && solidObjects.Contains(grid.tileType))
             {
                 //Debug.Log("Colliding with: " + grid.tileType + " since the original object is: " + typeToCheck);
+                if(grid.tileType == typeToCheck)
+                {
+                    return false;
+                }
                 return true;
             }
         }
@@ -234,14 +272,19 @@ public class GridManager : MonoBehaviour
     //Move the object provided to a new given position
     public static bool MoveSelf(GridComponent gridComp, Vector2Int moveTo)
     {
-        if(InsertSelf(gridComp, moveTo))
+        if (InsertSelf(gridComp, moveTo, true))
         {
             if (RemoveSelf(gridComp))
             {
-                
+                //update all shooters
+                foreach (ShooterBehavior shooter in FindObjectsOfType<ShooterBehavior>())
+                {
+                    shooter.UpdateLaser();
+                }
                 return true;
             }
-        } 
+        }
+        
         return false;
     }
 

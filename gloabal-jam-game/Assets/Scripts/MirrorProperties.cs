@@ -7,7 +7,7 @@ public class MirrorProperties : MonoBehaviour
 
     private GridComponent gc;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         gc = GetComponent<GridComponent>();
     }

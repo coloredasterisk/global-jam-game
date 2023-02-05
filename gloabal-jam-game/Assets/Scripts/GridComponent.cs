@@ -61,7 +61,7 @@ public class GridComponent : MonoBehaviour
             transform.position = new Vector3(gridPosition.x, gridPosition.y, 0);
         }
         originalPosition = gridPosition;
-        AddToGrid(true);
+        AddToGrid(true, false);
     }
     public bool MovePosition(Vector2Int v, MovementStatus moveType)
     {
@@ -106,8 +106,8 @@ public class GridComponent : MonoBehaviour
         }
         return returnMovement;
     }
-    public bool AddToGrid(bool isClone) {
-        if (GridManager.InsertSelf(this))
+    public bool AddToGrid(bool isClone, bool updateWorld) {
+        if (GridManager.InsertSelf(this, updateWorld))
         {
             return true;
         }
@@ -150,7 +150,7 @@ public class GridComponent : MonoBehaviour
         GridComponent pushable = GridManager.CheckItemAtPosition(state, TileType.Block, newPos);
         if (pushable == null) pushable = GridManager.CheckItemAtPosition(state, TileType.Player, newPos);
 
-        if (pushable != null)
+        if (pushable != null && (pushable != this))
         {
             pushable.MovePosition(moveDirection, moveType);
             if (AttemptToMove(this, newPos))
@@ -169,7 +169,15 @@ public class GridComponent : MonoBehaviour
             }
             return true;
         }
-        //Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but something (immovable) " + newPos + " blocked it's path.");
+        if(pushable != null)
+        {
+            Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but something " + pushable+ " "+ newPos + " blocked it's path.");
+        }
+        else
+        {
+            Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but something (immovable) " + newPos + " blocked it's path.");
+        }
+        
         return false;
     }
     private IEnumerator LerpPosition()
@@ -197,7 +205,7 @@ public class GridComponent : MonoBehaviour
     {
         RemoveFromGrid();
         gridPosition = originalPosition;
-        AddToGrid(false);
+        AddToGrid(false, true);
 
         PressurePlateBehavior plate = GetComponent<PressurePlateBehavior>();
         if(plate != null)

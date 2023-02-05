@@ -34,8 +34,8 @@ public class ShooterBehavior : MonoBehaviour
     private Vector2Int locationToMake;
     public GridComponent gridComponent;
     public List<GridComponent> chain;
-
-    [SerializeField] private int num;
+    public PillarBehaviour hitPillar = null;
+    public bool isShooting = false;
 
 
     private void Awake()
@@ -49,8 +49,29 @@ public class ShooterBehavior : MonoBehaviour
         locationToMake = gridComponent.gridPosition;
         //CreateLaser(directionFacing);
     }
-    
 
+    public void UpdateLaser()
+    {
+        if (isShooting)
+        {
+            CutLaser(0);
+            CreateLaser();
+        }
+    }
+
+    public void ToggleLaser(bool state)
+    {
+        isShooting = state;
+        if (isShooting)
+        {
+            CutLaser(0);
+            CreateLaser();
+        }
+        else
+        {
+            CutLaser(0);
+        }
+    }
 
     public void CreateLaser()
     {
@@ -72,18 +93,30 @@ public class ShooterBehavior : MonoBehaviour
         locationToMake = gridComponent.gridPosition;
 
     }
-
-    public void CutLaser()
+    public void CutLaser(int index)
     {
-        while(chain.Count > 0)
+        while (chain.Count > index)
         {
-            GridComponent laser = chain[0];
+            GridComponent laser = chain[index];
             chain.Remove(laser);
             laser.RemoveFromGrid();
             Destroy(laser.gameObject);
         }
         directionToMake = directionFacing;
         locationToMake = gridComponent.gridPosition;
+
+        if(hitPillar != null)
+        {
+            hitPillar.pressure.SwitchOff();
+            hitPillar = null;
+
+        }
+
+    }
+
+    public void CutLaser()
+    {
+        CutLaser(0);
 
     }
 
@@ -92,9 +125,14 @@ public class ShooterBehavior : MonoBehaviour
         GridComponent test = GridManager.CheckItemAtPosition(gridComponent, types, locationToMake + direction);
         if (test == null)
         {
+            LaserBehavior laser = laserPrefab.GetComponent<LaserBehavior>();
+            laser.parent = this;
+            laser.index = chain.Count;
             laserPrefab.transform.position = 
                 GridManager.convertToVector3(locationToMake + direction);
+
             chain.Add(Instantiate(laserPrefab, transform.parent));
+
             locationToMake = locationToMake + direction;
             return true;
         }
@@ -104,6 +142,15 @@ public class ShooterBehavior : MonoBehaviour
             locationToMake = locationToMake + direction; 
             return true;
         }
+        else if(test.tileType == TileType.Pillar)
+        {
+            hitPillar = test.GetComponent<PillarBehaviour>();
+            hitPillar.pressure.SwitchOn();
+
+            return false;
+        }
+
+
         else
         {
             return false;

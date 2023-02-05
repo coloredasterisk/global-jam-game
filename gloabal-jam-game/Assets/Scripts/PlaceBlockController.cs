@@ -57,38 +57,58 @@ public class PlaceBlockController : MonoBehaviour
     }
 
     void PlaceBlock() {
-        if (Input.GetKeyUp(KeyCode.B)){
-            for(int i =0; i<blockEquip.Length; i++) {
-                if (blockEquip[i] == true){
-                    if (i == 0){
-                        block1.transform.position = checkPosition();
-                        GameObject newBlock = Instantiate(block1,FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                        //gridComponent.gridPosition =
-                    } else if (i==1) {
-                        GameObject newBlock = Instantiate(block2,FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                        newBlock.transform.position = checkPosition();
-                    } else if (i==2) {
-                        GameObject newBlock = Instantiate(block3,FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                        newBlock.transform.position = checkPosition();
-                    }else if (i==3) {
-                        GameObject newBlock = Instantiate(block4,FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                        newBlock.transform.position = checkPosition();
-                    }else if (i==4) {
-                        Debug.Log("placed");
-                        GameObject newBlock = Instantiate(block5,FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                        newBlock.transform.position = checkPosition();
-                    }else if (i==5) {
-                        Debug.Log("placed");
-                        GameObject newBlock = Instantiate(block6,FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                        newBlock.transform.position = checkPosition();
-                    }else if (i==6) {
-                        Debug.Log("placed");
-                        GameObject newBlock = Instantiate(block7,FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                        newBlock.transform.position = checkPosition();
+        if(gridComponent.isLerping == false)
+        {
+            if (Input.GetKeyUp(KeyCode.B))
+            {
+                for (int i = 0; i < blockEquip.Length; i++)
+                {
+                    if (blockEquip[i] == true)
+                    {
+                        if (i == 0)
+                        {
+                            block1.transform.position = GridManager.convertToVector3(checkPosition());
+                            GameObject newBlock = Instantiate(block1, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                                                                                                                                             //gridComponent.gridPosition =
+                        }
+                        else if (i == 1)
+                        {
+                            GameObject newBlock = Instantiate(block2, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            newBlock.transform.position = GridManager.convertToVector3(checkPosition());
+                        }
+                        else if (i == 2)
+                        {
+                            GameObject newBlock = Instantiate(block3, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            newBlock.transform.position = GridManager.convertToVector3(checkPosition());
+                        }
+                        else if (i == 3)
+                        {
+                            GameObject newBlock = Instantiate(block4, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            newBlock.transform.position = GridManager.convertToVector3(checkPosition());
+                        }
+                        else if (i == 4)
+                        {
+                            Debug.Log("placed");
+                            GameObject newBlock = Instantiate(block5, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            newBlock.transform.position = GridManager.convertToVector3(checkPosition());
+                        }
+                        else if (i == 5)
+                        {
+                            Debug.Log("placed");
+                            GameObject newBlock = Instantiate(block6, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            newBlock.transform.position = GridManager.convertToVector3(checkPosition());
+                        }
+                        else if (i == 6)
+                        {
+                            Debug.Log("placed");
+                            GameObject newBlock = Instantiate(block7, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            newBlock.transform.position = GridManager.convertToVector3(checkPosition());
+                        }
                     }
                 }
+                //Instantiate(Object.Wall); // need to palce block in current position 
             }
-           //Instantiate(Object.Wall); // need to palce block in current position 
+
 
         } 
         
@@ -107,24 +127,24 @@ public class PlaceBlockController : MonoBehaviour
     }
 
 
-    Vector3 checkPosition() {
-        Vector3 current = transform.position;
-        Vector3 placement = new Vector3 (0,0,0);
+    Vector2Int checkPosition() {
+        Vector2Int current = GridManager.convertToVector2(transform.position);
+        Vector2Int placement = new Vector2Int (0,0);
         if(player.facing == Facing.Up){
 
-            placement = current + new Vector3 (0,1,0);
+            placement = current + new Vector2Int(0,1);
 
         } else if (player.facing == Facing.Down){
 
-            placement = current + new Vector3 (0,-1,0);
+            placement = current + new Vector2Int(0,-1);
 
         } else if (player.facing == Facing.Left) {
 
-            placement = current + new Vector3 (-1,0,0);
+            placement = current + new Vector2Int(-1,0);
 
         } else if (player.facing == Facing.Right) {
 
-            placement = current + new Vector3 (1,0,0);
+            placement = current + new Vector2Int(1,0);
             
         } 
         return placement;

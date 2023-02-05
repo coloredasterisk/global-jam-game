@@ -55,7 +55,7 @@ public class PressurePlateBehavior : MonoBehaviour
             {
                 if(component.GetComponent<ShooterBehavior>() != null)
                 {
-                    component.GetComponent<ShooterBehavior>().CreateLaser();
+                    component.GetComponent<ShooterBehavior>().ToggleLaser(false);
                 }
                 else
                 {
@@ -74,11 +74,11 @@ public class PressurePlateBehavior : MonoBehaviour
             {
                 if (component.GetComponent<ShooterBehavior>() != null)
                 {
-                    component.GetComponent<ShooterBehavior>().CutLaser();
+                    component.GetComponent<ShooterBehavior>().ToggleLaser(true);
                 }
                 else
                 {
-                    bool placed = component.AddToGrid(false);
+                    bool placed = component.AddToGrid(false, false);
                     if (placed)
                     {
                         component.gameObject.SetActive(true);

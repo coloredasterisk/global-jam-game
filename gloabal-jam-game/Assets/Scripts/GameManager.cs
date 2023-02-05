@@ -158,7 +158,7 @@ public class GameManager : MonoBehaviour
         player.RemoveFromGrid();
         player.transform.position = spawnPoint.transform.position;
         player.gridPosition = spawnPoint.gridPosition;
-        player.AddToGrid(false);
+        player.AddToGrid(false, true);
     }
 
     public void ChangeLevel(LevelBehavior level)
