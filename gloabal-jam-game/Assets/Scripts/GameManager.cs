@@ -73,6 +73,11 @@ public class GameManager : MonoBehaviour
         {
             RestartLevel();
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("MainScene");
+        }
+
         //allow user to hold undo button and undo speeds up based on time held down
         if (Input.GetKey(KeyCode.U))
         {

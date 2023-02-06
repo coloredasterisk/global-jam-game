@@ -103,7 +103,7 @@ public class GridManager : MonoBehaviour
             }
             if(gridComp.tileType == TileType.Wall)
             {
-                Debug.Log("WAll added" + gridComp.name);
+                //Debug.Log("WAll added" + gridComp.name);
             }
 
             

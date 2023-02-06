@@ -6362,7 +6362,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.7050457, g: 0, b: 1, a: 0.19215687}
+  m_Color: {r: 0.7050457, g: 0, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -8798,7 +8798,7 @@ MonoBehaviour:
   clonedParent: {fileID: 1116378520469184273}
   createdParent: {fileID: 1116378520521988709}
   dimensions: {x: 19, y: 11}
-  cameraRadius: 4.5
+  cameraRadius: 5.5
   presentSpawnPoint: {fileID: 1116378520233681235}
   pastSpawnPoint: {fileID: 1116378518754417968}
   AdjacentLevels:

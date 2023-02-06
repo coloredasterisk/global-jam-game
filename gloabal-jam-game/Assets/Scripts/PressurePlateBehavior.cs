@@ -55,7 +55,7 @@ public class PressurePlateBehavior : MonoBehaviour
 
     private void TurnListOff(List<GridComponent> list)
     {
-        if (list != null)
+        if (list != null && list.Count > 0)
         {
             foreach (GridComponent component in list)
             {
@@ -75,7 +75,7 @@ public class PressurePlateBehavior : MonoBehaviour
     }
     private void TurnListOn(List<GridComponent> list)
     {
-        if (list != null)
+        if (list != null && list.Count > 0)
         {
             foreach (GridComponent component in list)
             {

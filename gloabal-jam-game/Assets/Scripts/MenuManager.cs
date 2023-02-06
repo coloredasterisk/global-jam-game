@@ -52,7 +52,7 @@ public class MenuManager : MonoBehaviour
     //MainMenu stuff
     void PlayGameButton()
     {
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("GameScene");
     }
     void OpenSettingsMenu()
     {

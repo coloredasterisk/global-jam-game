@@ -154,7 +154,7 @@ public class ShooterBehavior : MonoBehaviour
                 GridManager.convertToVector3(locationToMake + direction);
             
 
-            chain.Add(Instantiate(laserPrefab, transform.parent));
+            chain.Add(Instantiate(laserPrefab, GridManager.convertToVector3(locationToMake + direction), Quaternion.identity, transform.parent));
 
             locationToMake = locationToMake + direction;
             return true;

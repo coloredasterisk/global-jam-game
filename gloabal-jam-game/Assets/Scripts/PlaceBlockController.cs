@@ -76,41 +76,47 @@ public class PlaceBlockController : MonoBehaviour
                     {
                         if (i == 0)
                         {
-                            SetPosition(block1);
-                            GameObject newBlock = Instantiate(block1, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                                                                                                                                             //gridComponent.gridPosition =
+                            Vector3 position = SetPosition(block1);
+                            GameObject newBlock = Instantiate(block1, position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            newBlock.transform.position = position;
                         }
                         else if (i == 1)
                         {
-                            SetPosition(block2);
-                            GameObject newBlock = Instantiate(block2, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            Vector3 position = SetPosition(block2);
+                            GameObject newBlock = Instantiate(block2, position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            newBlock.transform.position = position;
                         }
                         else if (i == 2)
                         {
-                            SetPosition(block3);
-                            GameObject newBlock = Instantiate(block3, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            Vector3 position = SetPosition(block3);
+                            GameObject newBlock = Instantiate(block3, position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            newBlock.transform.position = position;
                         }
                         else if (i == 3)
                         {
-                            SetPosition(block4);
-                            GameObject newBlock = Instantiate(block4, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            Vector3 position = SetPosition(block4);
+                            GameObject newBlock = Instantiate(block4, position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            newBlock.transform.position = position;
                         }
                         else if (i == 4)
                         {
-                            SetPosition(block5);
-                            GameObject newBlock = Instantiate(block5, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                            
+                            Vector3 position = SetPosition(block5);
+                            GameObject newBlock = Instantiate(block5, position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            newBlock.transform.position = position;
+
                         }
                         else if (i == 5)
                         {
-                            SetPosition(block6);
-                            GameObject newBlock = Instantiate(block6, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            Vector3 position = SetPosition(block6);
+                            GameObject newBlock = Instantiate(block6, position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            newBlock.transform.position = position;
 
                         }
                         else if (i == 6)
                         {
-                            SetPosition(block7);
-                            GameObject newBlock = Instantiate(block7, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            Vector3 position = SetPosition(block7);
+                            GameObject newBlock = Instantiate(block7, position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                            newBlock.transform.position = position;
 
                         }
                     }
@@ -123,11 +129,13 @@ public class PlaceBlockController : MonoBehaviour
         
     }
 
-    public void SetPosition(GameObject block)
+    public Vector3 SetPosition(GameObject block)
     {
-        Vector2Int gridPos = checkPosition();
-        block.transform.position = GridManager.convertToVector3(gridPos);
+        Vector2Int gridPos = checkPosition() + gridComponent.gridPosition;
+        Debug.Log(gridPos);
+        block.transform.localPosition = GridManager.convertToVector3(gridPos);
         block.GetComponent<GridComponent>().gridPosition = gridPos;
+        return GridManager.convertToVector3(gridPos);
     }
 
     bool[] enableBlock(int input )
@@ -144,23 +152,22 @@ public class PlaceBlockController : MonoBehaviour
 
 
     Vector2Int checkPosition() {
-        Vector2Int current = GridManager.convertToVector2(transform.position);
         Vector2Int placement = new Vector2Int (0,0);
         if(player.facing == Facing.Up){
 
-            placement = current + new Vector2Int(0,1);
+            placement = new Vector2Int(0,1);
 
         } else if (player.facing == Facing.Down){
 
-            placement = current + new Vector2Int(0,-1);
+            placement = new Vector2Int(0,-1);
 
         } else if (player.facing == Facing.Left) {
 
-            placement = current + new Vector2Int(-1,0);
+            placement =  new Vector2Int(-1,0);
 
         } else if (player.facing == Facing.Right) {
 
-            placement = current + new Vector2Int(1,0);
+            placement = new Vector2Int(1,0);
             
         } 
         return placement;

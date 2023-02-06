@@ -1299,7 +1299,7 @@ MonoBehaviour:
   clonedParent: {fileID: 1885876026435598375}
   createdParent: {fileID: 1885876026399636819}
   dimensions: {x: 19, y: 11}
-  cameraRadius: 4.5
+  cameraRadius: 5.5
   presentSpawnPoint: {fileID: 1885876026065077861}
   pastSpawnPoint: {fileID: 1885876028083321350}
   AdjacentLevels:
