@@ -23,6 +23,9 @@ public enum TileType
     LaserHorizontal,
     Pillar,
     EndGame,
+    SpawnForcefield,
+    Coin,
+    Collectable,
 }
 
 public enum MovementStatus
@@ -46,7 +49,7 @@ public class GridComponent : MonoBehaviour
     public Vector2Int gridPosition;
     public bool isLerping = false;
     
-    private float lerpSpeed = 10f;
+    private float lerpSpeed = 15f;
 
 
     // Start is called before the first frame update
@@ -61,7 +64,16 @@ public class GridComponent : MonoBehaviour
             transform.position = new Vector3(gridPosition.x, gridPosition.y, 0);
         }
         originalPosition = gridPosition;
-        AddToGrid(true, false);
+
+        if(transform.parent.name.Equals("ClonedObjects") || transform.parent.name.Equals("CreatedObjects"))
+        {
+            AddToGrid(true, false, true);//declare created by player
+        }
+        else
+        {
+            AddToGrid(true, false, false);
+        }
+        
     }
     public bool MovePosition(Vector2Int v, MovementStatus moveType)
     {
@@ -107,8 +119,8 @@ public class GridComponent : MonoBehaviour
         }
         return returnMovement;
     }
-    public bool AddToGrid(bool isClone, bool updateWorld) {
-        if (GridManager.InsertSelf(this, updateWorld))
+    public bool AddToGrid(bool isClone, bool updateWorld, bool createdByPlayer) {
+        if (GridManager.InsertSelf(this, updateWorld, createdByPlayer))
         {
             return true;
         }
@@ -147,36 +159,43 @@ public class GridComponent : MonoBehaviour
     }
     private bool CheckPushable(StateType state, Vector2Int newPos, Vector2Int moveDirection, MovementStatus moveType)
     {
+        
         //Check if object is pushable 
         GridComponent pushable = GridManager.CheckItemAtPosition(state, TileType.Block, newPos);
+        //Debug.Log("Checking to push:" + pushable);
         if (pushable == null) pushable = GridManager.CheckItemAtPosition(state, TileType.Player, newPos);
-
         if (pushable != null && (pushable != this))
         {
-            pushable.MovePosition(moveDirection, moveType);
-            if (AttemptToMove(this, newPos))
+            if(pushable.MovePosition(moveDirection, moveType))
             {
-                if(moveType == MovementStatus.Normal)
+                if (AttemptToMove(this, newPos))
                 {
-                    //Debug.Log(name + "(GridComponent) was able to move in the direction " + moveDirection + " resulting in a new position " + newPos + " by pushing " + pushable.name);
-                    InteractionLog.NewMovementLog(this, moveDirection, pushable);
-                } else if(moveType == MovementStatus.IcePush)
-                {
-                    InteractionLog.history.RemoveAt(InteractionLog.history.Count - 1);
-                    InteractionLog.NewMovementLog(pushable, moveDirection, this);
-                    InteractionLog.NewMovementLog(pushable, moveDirection, null);
+                    if (moveType == MovementStatus.Normal)
+                    {
+                        //Debug.Log(name + "(GridComponent) was able to move in the direction " + moveDirection + " resulting in a new position " + newPos + " by pushing " + pushable.name);
+                        InteractionLog.NewMovementLog(this, moveDirection, pushable);
+                    }
+                    else if (moveType == MovementStatus.IcePush)
+                    {
+                        InteractionLog.history.RemoveAt(InteractionLog.history.Count - 1);
+                        InteractionLog.NewMovementLog(pushable, moveDirection, this);
+                        InteractionLog.NewMovementLog(pushable, moveDirection, null);
+                    }
+                    return true;
+
                 }
-                
+
             }
-            return true;
+            
+            
         }
         if(pushable != null)
         {
-            Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but something " + pushable+ " "+ newPos + " blocked it's path.");
+            //Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but something " + pushable+ " "+ newPos + " blocked it's path.");
         }
         else
         {
-            Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but something (immovable) " + newPos + " blocked it's path.");
+            //Debug.Log(name + "(GridComponent) attempted to move in the direction " + moveDirection + " but something (immovable) " + newPos + " blocked it's path.");
         }
         
         return false;
@@ -206,7 +225,8 @@ public class GridComponent : MonoBehaviour
     {
         RemoveFromGrid();
         gridPosition = originalPosition;
-        AddToGrid(false, true);
+        transform.position = GridManager.convertToVector3(originalPosition);
+        AddToGrid(false, true, false);
 
         PressurePlateBehavior plate = GetComponent<PressurePlateBehavior>();
         if(plate != null)

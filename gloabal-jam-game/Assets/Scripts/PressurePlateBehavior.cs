@@ -15,9 +15,20 @@ public class PressurePlateBehavior : MonoBehaviour
 
     private void Start()
     {
+        if (!isOn)
+        {
+            TurnListOff(turnObjectsOn);
+            TurnListOn(turnObjectsOff);
+            GetComponent<SpriteRenderer>().sprite = offSprite;
+        }
+        else
+        {
+            TurnListOff(turnObjectsOff);
+            TurnListOn(turnObjectsOn);
+            GetComponent<SpriteRenderer>().sprite = onSprite;
+        }
         clicked = GetComponent<AudioSource>();
-        TurnListOff(turnObjectsOn);
-        TurnListOn(turnObjectsOff);
+        
     }
 
     public void DynamicReset()
@@ -25,10 +36,13 @@ public class PressurePlateBehavior : MonoBehaviour
         isOn = false;
         TurnListOff(turnObjectsOn);
         TurnListOn(turnObjectsOff);
+        GetComponent<SpriteRenderer>().sprite = offSprite;
+
     }
 
     public void SwitchOn()
     {
+
         isOn = true;
         TurnListOff(turnObjectsOff);
         TurnListOn(turnObjectsOn);
@@ -65,7 +79,7 @@ public class PressurePlateBehavior : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("About to remove :" + component.name);
+                    //Debug.Log("About to remove :" + component.name);
                     component.RemoveFromGrid();
                     component.gameObject.SetActive(false);
                 }
@@ -85,7 +99,7 @@ public class PressurePlateBehavior : MonoBehaviour
                 }
                 else
                 {
-                    bool placed = component.AddToGrid(false, false);
+                    bool placed = component.AddToGrid(false, false, false);
                     if (placed)
                     {
                         component.gameObject.SetActive(true);

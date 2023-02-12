@@ -102,6 +102,7 @@ public class ShooterBehavior : MonoBehaviour
     }
     public void CutLaser(int index)
     {
+        //Debug.Log("test");
         while (chain.Count > index)
         {
             GridComponent laser = chain[index];

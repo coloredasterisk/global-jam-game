@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useWorldPosition: 1
   tileType: 10
-  gridPosition: {x: 0, y: 0}
+  gridPosition: {x: 148, y: 0}
   isLerping: 0
 --- !u!114 &3187236295195508239
 MonoBehaviour:

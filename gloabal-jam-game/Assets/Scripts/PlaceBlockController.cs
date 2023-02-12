@@ -1,18 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlaceBlockController : MonoBehaviour
 {
     private PlayerController player;
     private GridComponent gridComponent;
+    public SpriteRenderer placementDisplay;
 
-    public RectTransform selector;
-    
-
-    public GameObject block1,block2,block3,block4,block5,block6,block7;
     public List<GameObject> blocks;
-    bool[] blockEquip ={false,false,false,false,false,false,false};
+    private List<bool> blockEquipped = new List<bool>(); 
+
+    public int selection = 1;
 
     
      
@@ -22,10 +22,15 @@ public class PlaceBlockController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-        blockEquip[0] = true;
+        for(int i = 0; i < blocks.Count; i++)
+        {
+            blockEquipped.Add(false);
+        }
+        blockEquipped[0] = true;
+
         player = GetComponent<PlayerController>();
         gridComponent = GetComponent<GridComponent>();
+        placementDisplay.sprite = blocks[0].GetComponent<SpriteRenderer>().sprite;
     }
 
     // Update is called once per frame
@@ -33,92 +38,79 @@ public class PlaceBlockController : MonoBehaviour
     {
         changeBlock();
         PlaceBlock();
+        UpdateDisplay();
     }
 
     void changeBlock()
     {
+        if (Input.GetMouseButtonDown(1))
+        {
+            ChangeSelection();
+        }
+
         if (Input.GetKeyUp(KeyCode.Alpha1)) {
-            selector.localPosition = new Vector3(25, 150, 0);
-            enableBlock(1);
+            ChangeSelection(1);
         } else if (Input.GetKeyUp(KeyCode.Alpha2)){
-            selector.localPosition = new Vector3(25, 100, 0);
-            enableBlock(2);
+            ChangeSelection(2);
         } else if (Input.GetKeyUp(KeyCode.Alpha3)){
-            selector.localPosition = new Vector3(25, 50, 0);
-            enableBlock(3);
-        }else if (Input.GetKeyUp(KeyCode.Alpha4)){
-            selector.localPosition = new Vector3(25, 0, 0);
-            Debug.Log("turned on 4");
-            enableBlock(4);
-        }else if (Input.GetKeyUp(KeyCode.Alpha5)){
-            selector.localPosition = new Vector3(25, -50, 0);
-            Debug.Log("turned on 5");
-            enableBlock(5);
+            ChangeSelection(3);
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha4)){
+            ChangeSelection(4);
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha5)){
+            ChangeSelection(5);
         } else if (Input.GetKeyUp(KeyCode.Alpha6)){
-            selector.localPosition = new Vector3(25, -100, 0);
-            Debug.Log("turned on 6");
-            enableBlock(6);
+            ChangeSelection(6);
         } else if (Input.GetKeyUp(KeyCode.Alpha7)){
-            selector.localPosition = new Vector3(25, -150, 0);
-            Debug.Log("turned on 7");
-            enableBlock(7);
+            ChangeSelection(7);
         } 
+    }
+    void ChangeSelection(int num)
+    {
+        //Debug.Log(">"+SettingsManager.placeableBlockAvailable.Contains(blocks[selection - 1].GetComponent<GridComponent>().tileType));
+        if (num - 1 >= blocks.Count) return;
+        if (SettingsManager.placeableBlockAvailable.Contains(blocks[num - 1].GetComponent<GridComponent>().tileType))
+        {
+            CanvasReference.Instance.selector.localPosition = new Vector3(25, 200 - 50 * num, 0);
+            selection = num;
+            enableBlock(num);
+            placementDisplay.sprite = blocks[num - 1].GetComponent<SpriteRenderer>().sprite;
+        }
+        
+    }
+
+    void ChangeSelection()
+    {
+        selection++;
+        if (selection - 1 >= blocks.Count) { selection = 1;}
+        //Debug.Log(">" + SettingsManager.placeableBlockAvailable.Contains(blocks[selection - 1].GetComponent<GridComponent>().tileType));
+        if (SettingsManager.placeableBlockAvailable.Contains(blocks[selection - 1].GetComponent<GridComponent>().tileType))
+        {
+            if (selection > 7)
+            {
+                selection = 1;
+            }
+            CanvasReference.Instance.selector.localPosition = new Vector3(25, 200 - 50 * selection, 0);
+            enableBlock(selection);
+            placementDisplay.sprite = blocks[selection - 1].GetComponent<SpriteRenderer>().sprite;
+        }
+        
     }
 
     void PlaceBlock() {
         if(gridComponent.isLerping == false)
         {
-            if (Input.GetKeyUp(KeyCode.B))
+            if (Input.GetKeyUp(KeyCode.E) || Input.GetMouseButtonDown(0))
             {
-                for (int i = 0; i < blockEquip.Length; i++)
+                for (int i = 0; i < blockEquipped.Count; i++)
                 {
-                    if (blockEquip[i] == true)
+                    if (blockEquipped[i] == true)
                     {
-                        if (i == 0)
-                        {
-                            Vector3 position = SetPosition(block1);
-                            GameObject newBlock = Instantiate(block1, position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                            newBlock.transform.position = position;
-                        }
-                        else if (i == 1)
-                        {
-                            Vector3 position = SetPosition(block2);
-                            GameObject newBlock = Instantiate(block2, position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                            newBlock.transform.position = position;
-                        }
-                        else if (i == 2)
-                        {
-                            Vector3 position = SetPosition(block3);
-                            GameObject newBlock = Instantiate(block3, position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                            newBlock.transform.position = position;
-                        }
-                        else if (i == 3)
-                        {
-                            Vector3 position = SetPosition(block4);
-                            GameObject newBlock = Instantiate(block4, position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                            newBlock.transform.position = position;
-                        }
-                        else if (i == 4)
-                        {
-                            Vector3 position = SetPosition(block5);
-                            GameObject newBlock = Instantiate(block5, position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                            newBlock.transform.position = position;
-
-                        }
-                        else if (i == 5)
-                        {
-                            Vector3 position = SetPosition(block6);
-                            GameObject newBlock = Instantiate(block6, position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                            newBlock.transform.position = position;
-
-                        }
-                        else if (i == 6)
-                        {
-                            Vector3 position = SetPosition(block7);
-                            GameObject newBlock = Instantiate(block7, position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
-                            newBlock.transform.position = position;
-
-                        }
+                        Vector3 position = SetPosition(blocks[i]);
+                        GameObject newBlock = Instantiate(blocks[i], position, Quaternion.identity, FindObjectOfType<GameManager>().currentLevel.createdParent.transform); // need to include position
+                        newBlock.transform.position = position;
+                        
                     }
                 }
                 //Instantiate(Object.Wall); // need to palce block in current position 
@@ -129,25 +121,45 @@ public class PlaceBlockController : MonoBehaviour
         
     }
 
+    public void UpdateDisplay()
+    {
+        Facing direction = player.facing;
+        switch (direction)
+        {
+            case Facing.Left:
+                placementDisplay.transform.localPosition = new Vector3(-1,0,0);
+                break;
+            case Facing.Right:
+                placementDisplay.transform.localPosition = new Vector3(1, 0, 0);
+                break;
+            case Facing.Down:
+                placementDisplay.transform.localPosition = new Vector3(0, -1, 0);
+                break;
+            case Facing.Up:
+                placementDisplay.transform.localPosition = new Vector3(0, 1, 0);
+                break;
+        }
+    }
+
     public Vector3 SetPosition(GameObject block)
     {
         Vector2Int gridPos = checkPosition() + gridComponent.gridPosition;
-        Debug.Log(gridPos);
+        //Debug.Log(gridPos);
         block.transform.localPosition = GridManager.convertToVector3(gridPos);
         block.GetComponent<GridComponent>().gridPosition = gridPos;
         return GridManager.convertToVector3(gridPos);
     }
 
-    bool[] enableBlock(int input )
+    List<bool> enableBlock(int input )
     { //goes and unequips all blocks and equips inputted block
-        for(int i =0; i<blockEquip.Length; i++){
+        for(int i =0; i< blockEquipped.Count; i++){
             if (i == input-1 ){
-                blockEquip[i]= true;
+                blockEquipped[i]= true;
             } else {
-                blockEquip[i]= false;
+                blockEquipped[i]= false;
             }
         }
-        return blockEquip ;
+        return blockEquipped;
     }
 
 
@@ -171,6 +183,21 @@ public class PlaceBlockController : MonoBehaviour
             
         } 
         return placement;
+    }
+
+    public void AddPlaceableItem(Collectable collectable)
+    {
+        blocks.Add(collectable.prefabActive);
+        blockEquipped.Add(false);
+
+        GameObject display = Instantiate(CanvasReference.Instance.uiDisplayTemplate, CanvasReference.Instance.selector.transform.parent);
+        display.GetComponent<Image>().sprite = collectable.uiDisplay;
+        display.GetComponent<RectTransform>().localPosition = new Vector3(25, 200 - 50 * blocks.Count, 0);
+        display.transform.SetSiblingIndex(0);
+
+        SettingsManager.placeableBlockAvailable.Add(collectable.prefabActive.GetComponent<GridComponent>().tileType);
+        
+
     }
     
     

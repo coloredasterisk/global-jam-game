@@ -5,9 +5,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Statistics")]
+    public int coins = 0;
+
     [Header("Grid Stuff")]
     public List<GridComponent> gridPrefabs;
     public static Dictionary<TileType, GridComponent> gridPrefabsDict = new Dictionary<TileType, GridComponent>();
@@ -32,7 +36,6 @@ public class GameManager : MonoBehaviour
 
     [Header("\nVisualEffects")]
     public GameObject postProcessing;
-    public GameObject colorFilter;
     public CinemachineTargetGroup cameraLevelTarget;
 
     [Header("\nOther")]
@@ -75,7 +78,7 @@ public class GameManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene("MainScene");
+            SceneManager.LoadScene("MenuScene");
         }
 
         //allow user to hold undo button and undo speeds up based on time held down
@@ -116,7 +119,7 @@ public class GameManager : MonoBehaviour
             pastGround.SetActive(true);
 
             postProcessing.SetActive(true);
-            colorFilter.SetActive(true);
+            CanvasReference.Instance.colorFilter.SetActive(true);
 
         }
         else//switch to present
@@ -130,7 +133,7 @@ public class GameManager : MonoBehaviour
             pastGround.SetActive(false);
 
             postProcessing.SetActive(false);
-            colorFilter.SetActive(false);
+            CanvasReference.Instance.colorFilter.SetActive(false);
 
         }
     }
@@ -163,7 +166,12 @@ public class GameManager : MonoBehaviour
         GridComponent[] dynamicObjects = currentLevel.dynamicPresent.GetComponentsInChildren<GridComponent>();
         foreach (GridComponent dynamic in dynamicObjects)
         {
+            if(dynamic.tileType == TileType.LaserVertical || dynamic.tileType == TileType.LaserHorizontal)
+            {
+                continue;
+            }
             dynamic.DynamicReset();
+
         }
 
         InteractionLog.history.Clear();
@@ -174,10 +182,10 @@ public class GameManager : MonoBehaviour
         player.RemoveFromGrid();
         player.transform.position = spawnPoint.transform.position;
         player.gridPosition = spawnPoint.gridPosition;
-        player.AddToGrid(false, true);
+        player.AddToGrid(false, true, false);
     }
 
-    public void ChangeLevel(LevelBehavior level)
+    public void ChangeLevel(LevelBehavior level, GridComponent playerTriggered)
     {
 
         cameraLevelTarget.AddMember(level.gameObject.transform, 1, level.cameraRadius);
@@ -185,7 +193,14 @@ public class GameManager : MonoBehaviour
 
         currentLevel = level;
 
-        ResetPlayerPosition(pastPlayer.GetComponentInChildren<GridComponent>(true), currentLevel.pastSpawnPoint);
+        if (playerTriggered.GetComponent<PlaceBlockController>())//if the ancestor
+        {
+            ResetPlayerPosition(presentPlayer.GetComponentInChildren<GridComponent>(true), playerTriggered);
+        }
+        else
+        {
+            ResetPlayerPosition(pastPlayer.GetComponentInChildren<GridComponent>(true), currentLevel.pastSpawnPoint);
+        }
     }
 
     public void IntervalChange()
@@ -217,6 +232,12 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         SceneManager.LoadScene("MenuScene");
+    }
+    public void CollectCoin()
+    {
+        coins++;
+        CanvasReference.Instance.coinDisplay.SetActive(true);
+        CanvasReference.Instance.coinText.text = coins + "x";
     }
 
 

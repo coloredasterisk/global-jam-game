@@ -18,10 +18,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip[] sounds;
     public AudioSource audioSource;
 
-    private float holdThreshold = 0.2f;
-    public float holdTimer = 0f;
     public Facing facing = Facing.Down;
-    public bool extraControls = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,60 +31,56 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(holdTimer < holdThreshold)
-        {
-            if (Input.anyKey)
-            {
-                holdTimer += Time.deltaTime;
-            }
-        }
-
-
 
         if (!gridComponent.isLerping)
         {
-            FaceOnPress();
-        }
+            if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) || 
+                Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.RightArrow)) //face only
+            {
+                //Debug.Log("Test");
+                FaceOnPress();
+            }
+            else //move player
+            {
+                if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S))
+                {
+                    animator.SetFloat("MoveY", 0);
+                }
+                else if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+                {
+                    animator.SetFloat("MoveY", 1);
+                    facing = Facing.Up;
+                    bool moved = gridComponent.MovePosition(0, 1, MovementStatus.Normal);
+                    PlayStepSound(moved);
+                }
+                else if (Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))
+                {
+                    animator.SetFloat("MoveY", -1);
+                    facing = Facing.Down;
+                    bool moved = gridComponent.MovePosition(0, -1, MovementStatus.Normal);
+                    PlayStepSound(moved);
+                }
 
-        if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
-        {
-            holdTimer = 0;
-        }
-        if (!gridComponent.isLerping && (holdTimer > holdThreshold || extraControls))
-        {
-            if(Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S))
-            {
-                animator.SetFloat("MoveY", 0);
-            } 
-            else if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
-            {
-                animator.SetFloat("MoveY", 1);
-                bool moved = gridComponent.MovePosition(0, 1, MovementStatus.Normal);
-                PlayStepSound(moved);
+                else if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
+                {
+                    animator.SetFloat("MoveX", 0);
+                }
+                else if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+                {
+                    animator.SetFloat("MoveX", -1);
+                    facing = Facing.Left;
+                    bool moved = gridComponent.MovePosition(-1, 0, MovementStatus.Normal);
+                    PlayStepSound(moved);
+                }
+                else if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
+                {
+                    animator.SetFloat("MoveX", 1);
+                    facing = Facing.Right;
+                    bool moved = gridComponent.MovePosition(1, 0, MovementStatus.Normal);
+                    PlayStepSound(moved);
+                }
             }
-            else if (Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))
-            {
-                animator.SetFloat("MoveY", -1);
-                bool moved = gridComponent.MovePosition(0, -1, MovementStatus.Normal);
-                PlayStepSound(moved);
-            }
-
-            else if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
-            {
-                animator.SetFloat("MoveX", 0);
-            }
-            else if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
-            {
-                animator.SetFloat("MoveX", -1);
-                bool moved = gridComponent.MovePosition(-1, 0, MovementStatus.Normal);
-                PlayStepSound(moved);
-            }
-            else if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
-            {
-                animator.SetFloat("MoveX", 1);
-                bool moved = gridComponent.MovePosition(1, 0, MovementStatus.Normal);
-                PlayStepSound(moved);
-            } 
+            
             
         }
 
@@ -107,29 +100,29 @@ public class PlayerController : MonoBehaviour
 
     void FaceOnPress()
     {
-        if (Input.GetKeyDown(KeyCode.W) || (extraControls && Input.GetKeyDown(KeyCode.UpArrow)))
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             facing = Facing.Up;
             InteractionLog.NewFacingLog(this, facing);
         }
-        else if (Input.GetKeyDown(KeyCode.S) || (extraControls && Input.GetKeyDown(KeyCode.DownArrow)))
+        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
         {
             facing = Facing.Down;
             InteractionLog.NewFacingLog(this, facing);
 
         }
-        else if (Input.GetKeyDown(KeyCode.A) || (extraControls && Input.GetKeyDown(KeyCode.LeftArrow)))
+        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             facing = Facing.Left;
             InteractionLog.NewFacingLog(this, facing);
 
         }
-        else if (Input.GetKeyDown(KeyCode.D) || (extraControls && Input.GetKeyDown(KeyCode.RightArrow)))
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             facing = Facing.Right;
             InteractionLog.NewFacingLog(this, facing);
         }
-        
+
         DirectionToAnimation();
     }
     void IdleWhenReleased()

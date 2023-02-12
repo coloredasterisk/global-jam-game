@@ -109,7 +109,7 @@ public class InteractionLog : MonoBehaviour
                     {
                         recon.deadComponent.transform.parent = recon.clonedParent;
                         recon.deadComponent.transform.localScale = Vector3.one;
-                        recon.deadComponent.AddToGrid(true, true);
+                        recon.deadComponent.AddToGrid(true, true, true);
                     }
                 }
                 

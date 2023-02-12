@@ -30,11 +30,16 @@ public class GridManager : MonoBehaviour
         TileType.Pillar,
     };
 
-//overloaded function
     public static bool InsertSelf(GridComponent gridComp, bool updateWorld)
     {
-        return InsertSelf(gridComp, gridComp.gridPosition, updateWorld);
+        return InsertSelf(gridComp, gridComp.gridPosition, updateWorld, false);
     }
+        //overloaded function
+    public static bool InsertSelf(GridComponent gridComp, bool updateWorld, bool fromPlayerCreation)
+    {
+        return InsertSelf(gridComp, gridComp.gridPosition, updateWorld, fromPlayerCreation);
+    }
+
     /// <summary>
     /// This function adds a gridComp to a dictionary based on position.
     /// Will not add if two solid objects are in the same spot.
@@ -43,54 +48,40 @@ public class GridManager : MonoBehaviour
     /// </summary>
     /// <param name="gridComp">The GridComponent to be inserted</param>
     /// <param name="position">The position to be stored in the dictionary</param>
+    /// <param name="updateWorld">Set true if you want lasers to depend on this component's position</param>
+    /// <param name="fromPlayerCreation">Used for spawn forcefield to detect if the player has created this block</param>
     /// <returns></returns>
-    public static bool InsertSelf(GridComponent gridComp, Vector2Int position, bool updateWorld)
+    public static bool InsertSelf(GridComponent gridComp, Vector2Int position, bool updateWorld, bool fromPlayerCreation)
     {
+
         List<GridComponent> pointPosition = retrieveCell(gridComp, position);
 
         if (pointPosition != null)
         {
+            
+            //check if the item is created by the player and it intersects with anti-spawn
+            if (fromPlayerCreation)
+            {
+                if (CheckSpawnForcefield(gridComp, position)) return false;
+            }
+
+
             bool collide = GoingToCollide(gridComp.tileType, GetState(gridComp), position);
             if (collide)
             {
                 return false;
             }
+            pointPosition.Add(gridComp);//add to world
+
             bool solid = solidObjects.Contains(gridComp.tileType);
             if (solid)
             {
-                GridComponent pressurePlate = CheckItemAtPosition(gridComp, TileType.PressurePlate, position);
-                if (pressurePlate != null)
-                {
-                    pressurePlate.GetComponent<PressurePlateBehavior>().SwitchOn();
-                }
+                CheckPressurePlate(gridComp, position);
+                CheckLaserCollision(gridComp, position);
+                CheckForACoin(gridComp, position);
+                CheckForCollectable(gridComp, position);
 
-            }
-            
-            pointPosition.Add(gridComp);
-
-            if (solid)
-            {
-                GridComponent laserH = CheckItemAtPosition(gridComp, TileType.LaserHorizontal, position);
-                GridComponent laserV = CheckItemAtPosition(gridComp, TileType.LaserVertical, position);
-                if (laserH != null)
-                {
-                    LaserBehavior laser = laserH.GetComponent<LaserBehavior>();
-                    laser.parent.CutLaser(laser.index);
-                }
-                if (laserV != null)
-                {
-                    LaserBehavior laser = laserV.GetComponent<LaserBehavior>();
-                    laser.parent.CutLaser(laser.index);
-                }
-            }
-
-            if (solid)
-            {
-                bool coin = CheckItemAtPosition(gridComp, TileType.EndGame, position);
-                if (coin)
-                {
-                    FindObjectOfType<GameManager>(true).EndGame();
-                }
+                
             }
 
             if (updateWorld)
@@ -101,13 +92,8 @@ public class GridManager : MonoBehaviour
                     shooter.UpdateLaser();
                 }
             }
-            if(gridComp.tileType == TileType.Wall)
-            {
-                //Debug.Log("WAll added" + gridComp.name);
-            }
 
-            
-                
+
         }
         else
         {//make new list if the list does not exist
@@ -136,6 +122,7 @@ public class GridManager : MonoBehaviour
                 if (gc == gridComp)
                 {
                     index--;
+                   //Debug.Log(">>>B>>>" + CheckItemAtPosition(gridComp, TileType.Block, gridComp.gridPosition) + gridComp.gridPosition);
                     pointPosition.Remove(gridComp);
                 }
             }
@@ -156,13 +143,13 @@ public class GridManager : MonoBehaviour
 
             if (pointPosition.Count > 0)
             {
-                Debug.Log(pointPosition[0] + gridComp.name);
+                //Debug.Log(pointPosition[0] + gridComp.name);
             }
 
 
             return true;
         }
-        //Debug.Log("GridCOmp :"+ gridComp.name + "Position: " + gridComp.gridPosition);
+        Debug.Log("GridCOmp :"+ gridComp.name + "Position: " + gridComp.gridPosition);
         Debug.Log("This GridComponent cannot be found and thus cannot be removed");
         return false;
     }
@@ -264,10 +251,10 @@ public class GridManager : MonoBehaviour
             //dont add if two objects collide
             if (solidInsert && solidObjects.Contains(grid.tileType))
             {
-                //Debug.Log("Colliding with: " + grid.tileType + " since the original object is: " + typeToCheck);
+                //Debug.Log("Colliding with: " + grid.name+ " since the original object is: " + typeToCheck);
                 if(grid.tileType == typeToCheck)
                 {
-                    return false;
+                    //return false;
                 }
                 return true;
             }
@@ -295,16 +282,79 @@ public class GridManager : MonoBehaviour
         }
         return false;
     }
-
-    
+    private static bool CheckPressurePlate(GridComponent gridComp, Vector2Int position)
+    {
+        GridComponent pressurePlate = CheckItemAtPosition(gridComp, TileType.PressurePlate, position);
+        if (pressurePlate != null)
+        {
+            pressurePlate.GetComponent<PressurePlateBehavior>().SwitchOn();
+            return true;
+        }
+        
+        return false;
+    }
+    private static void CheckLaserCollision(GridComponent gridComp, Vector2Int position)
+    {
+        GridComponent laserH = CheckItemAtPosition(gridComp, TileType.LaserHorizontal, position);
+        GridComponent laserV = CheckItemAtPosition(gridComp, TileType.LaserVertical, position);
+        if (laserH != null)
+        {
+            LaserBehavior laser = laserH.GetComponent<LaserBehavior>();
+            laser.parent.CutLaser(laser.index);
+        }
+        if (laserV != null)
+        {
+            LaserBehavior laser = laserV.GetComponent<LaserBehavior>();
+            laser.parent.CutLaser(laser.index);
+        }
+    }
+    private static bool CheckSpawnForcefield(GridComponent gridComp, Vector2Int position)
+    {
+        GridComponent forcefield = CheckItemAtPosition(gridComp, TileType.SpawnForcefield, position);
+        if (forcefield != null)
+        {
+            return true;
+        }
+        return false;
+    }
+    private static bool CheckForACoin(GridComponent gridComp, Vector2Int position)
+    {
+        if(gridComp.tileType == TileType.Player)
+        {
+            //Collect a coin
+            GridComponent coin = CheckItemAtPosition(gridComp, TileType.Coin, position);
+            if (coin != null)
+            {
+                FindObjectOfType<GameManager>(true).CollectCoin();
+                RemoveSelf(coin);
+                Destroy(coin.gameObject);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    private static bool CheckForCollectable(GridComponent gridComp, Vector2Int position)
+    {
+        GridComponent collect = CheckItemAtPosition(gridComp, TileType.Collectable, position);
+        if (collect != null)
+        {
+            collect.GetComponent<Collectable>().Collect();
+            RemoveSelf(collect);
+            Destroy(collect.gameObject);
+            return true;
+        }
+        return false;
+    }
 
     //Move the object provided to a new given position
     public static bool MoveSelf(GridComponent gridComp, Vector2Int moveTo)
     {
-        if (InsertSelf(gridComp, moveTo, true))
+        if (InsertSelf(gridComp, moveTo, true, false))
         {
             if (RemoveSelf(gridComp))
             {
+
                 //update all shooters
                 foreach (ShooterBehavior shooter in FindObjectsOfType<ShooterBehavior>())
                 {
@@ -313,7 +363,7 @@ public class GridManager : MonoBehaviour
                 return true;
             }
         }
-        
+        //Debug.Log(gridComp.name + " was not able to be placed");
         return false;
     }
 

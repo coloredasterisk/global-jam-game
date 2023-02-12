@@ -185,8 +185,8 @@ public class LevelBehavior : MonoBehaviour
                 if (level.type == direction)
                 {
                     GameManager manager = FindObjectOfType<GameManager>();
-                    manager.ChangeLevel(level.level);
-                    manager.RestartLevel();
+                    manager.ChangeLevel(level.level, component);
+                    //manager.RestartLevel();
                     break;
                 }
             }
@@ -196,14 +196,12 @@ public class LevelBehavior : MonoBehaviour
     {
         EraseSpecificChildrenFromGrid(clonedParent);
         EraseSpecificChildrenFromGrid(createdParent);
-        EraseSpecificChildrenFromGrid(dynamicPresent);
-        EraseSpecificChildrenFromGrid(dynamicPast);
     }
     private void EraseSpecificChildrenFromGrid(GameObject parent)
     {
         for(int i = 0; i < parent.transform.childCount; i++) 
         {
-            Debug.Log(parent.transform.GetChild(i).name);
+            //Debug.Log(parent.transform.GetChild(i).name);
             parent.transform.GetChild(i).GetComponent<GridComponent>().RemoveFromGrid();
         }
     }
